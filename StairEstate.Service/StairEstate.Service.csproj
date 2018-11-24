@@ -45,7 +45,6 @@
     <Compile Include="BranchService.cs" />
     <Compile Include="BrandService.cs" />
     <Compile Include="CatagoryService.cs" />
-    <Compile Include="Class1.cs" />
     <Compile Include="CollectorService.cs" />
     <Compile Include="CountryService.cs" />
     <Compile Include="CurrentStockDetailsService.cs" />

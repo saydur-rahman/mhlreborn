@@ -26,7 +26,6 @@ namespace StaitEstate.View.Controllers.Plot_Management
             _projectService = projectService;
         }
 
-        // GET: Blocks
         [Route("index")]
         public ActionResult Index()
         {

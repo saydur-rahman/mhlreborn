@@ -1,0 +1,148 @@
+﻿@model IEnumerable<StairEstate.Entity.sales_stack_holder>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_InnerLayout.cshtml";
+}
+
+<div class="parentDiv panel navbar navbar-fixed" ng-app="app" ng-controller="stkctr">
+    <div class="head form-inline panel-heading">
+        <div class="form-group m-b--10">
+            <select ng-model="selectedCountry" ng-change="changeList()" class="form-control">
+                <option ng-selected="{{defaultvalue == country.Id}}"
+                        ng-repeat="country in countries"
+                        value="{{ country.Id }}">
+                    {{ country.Name }}
+                </option>
+            </select>
+        </div>
+        @{
+        var urlAdd = Url.Action("Create", "StackHolders", new { });
+        urlAdd = HttpUtility.UrlDecode(urlAdd);
+        }
+        <a data-ng-href="@urlAdd" class="btn btn-sm btn-small btn-primary">Add New Stack Holder</a>
+        <div class="pull-right" ng-show="loading">
+            <img src="~/Content/loading.gif" width="40" height="30" />
+        </div>
+    </div>
+    <div class="mainbody panel-body" style="overflow: auto">
+        <table class="table table-hover table-bordered">
+            <thead>
+                <tr style="color: salmon; font-weight: bold">
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>Mobile No.</th>
+                    <th>Email</th>
+                    <th>Nation ID</th>
+                    <th>Stack Holder Type</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="stk in stks">
+                    <td>{{$index+1}}</td>
+                    <td>{{stk.Name}}</td>
+                    <td>{{stk.Phone}}</td>
+                    <td>{{stk.Email}}</td>
+                    <td>{{stk.NId}}</td>
+                    <td>{{stk.StackHolderType.Name}}</td>
+                    <td>
+
+                        @{
+            var urlEdit = Url.Action("Edit", "StackHolders", new { id = "{{ stk.Id }}" });
+            urlEdit = HttpUtility.UrlDecode(urlEdit);
+
+            var urlDetails = Url.Action("Details", "StackHolders", new { id = "{{ stk.Id }}" });
+            urlDetails = HttpUtility.UrlDecode(urlDetails);
+                        }
+                        <a data-ng-href="@urlEdit" class="btn btn-primary btn-small btn-sm">Edit</a> |
+                        <a data-ng-href="@urlDetails" class="btn btn-warning btn-small btn-sm">Details</a> |
+                        <button class="btn btn-danger btn-small btn-sm"
+                                ng-click="deleteStk(stk)">
+                            Delete
+                        </button>
+
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    
+
+</div>
+
+<script>
+    var app = angular.module('app', ['ngBootbox']);
+    app.controller('stkctr', ['$scope', '$ngBootbox', 'stkService', stkctr]);
+    app.factory('stkService', ['$http', function ($http) {
+
+        return {
+            getCountry: function () {
+                return $http.get('/System/Users/GetCountry');
+            },
+
+            getStackHolders: function (id) {
+                return $http.get('/stackholders/getStackHolders/' + id);
+            },
+
+            deleteStk: function(id) {
+                return $http.get('/stackholders/deleteStk/' + id);
+            }
+        };
+    }]);
+
+    function stkctr($scope, $ngBootbox, stkService) {
+
+
+        stkService.getCountry().
+            then(function (res) {
+                $scope.$emit('LOAD');
+                $scope.countries = res.data;
+                $scope.selectedCountry = $scope.countries[0].Id.toString();
+
+
+                stkService.getStackHolders($scope.selectedCountry)
+                    .then(function (res) {
+                        $scope.stks = res.data;
+                    });
+                $scope.$emit('UNLOAD');
+            });
+
+
+        
+
+        $scope.changeList = function () {
+            stkService.getStackHolders($scope.selectedCountry)
+                .then(function (res) {
+                    $scope.$emit('LOAD');
+                    $scope.stks = res.data;
+                    $scope.$emit('UNLOAD');
+                });
+        }
+
+        $scope.deleteStk = function(stk) {
+            $ngBootbox.confirm('Delete Stack Holder: ' + stk.Name + ' ?')
+                .then(function() {
+                    stkService.deleteStk(stk.Id)
+                        .then(function (res) {
+                            $scope.$emit('LOAD');
+                            if (res.data === 'Done')
+                                $scope.stks.splice($scope.stks.indexOf(stk), 1);
+                            else
+                                $ngBootbox.alert("Some thing went wrong");
+                            $scope.$emit('UNLOAD');
+                        });
+                });
+        }
+
+        $scope.$on('LOAD', function () {
+            $scope.loading = true;
+
+        });
+        $scope.$on('UNLOAD', function () {
+            $scope.loading = false;
+
+        });
+
+    }
+</script>

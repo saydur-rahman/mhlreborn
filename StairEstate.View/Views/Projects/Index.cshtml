@@ -1,0 +1,199 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_InnerLayout.cshtml";
+}
+
+<div class="parentDiv panel navbar navbar-fixed" ng-app="app" ng-controller="ProjCtr">
+    <div class="head form-inline panel-heading">
+        <label style="color: black">Country</label>
+        <div class="form-group m-b--10">
+            <select ng-model="selectedCountry" ng-change="changeBranch()" class="form-control">
+                <option ng-repeat="country in countries"
+                        value="{{ country.Id }}"
+                        ng-selected="{{ country.Selected == true }}">
+                    {{ country.Name }}
+                </option>
+
+            </select>
+        </div>
+
+
+
+        <label style="color: black">Branch</label>
+        <div class="form-group m-b--10">
+            <select ng-model="selectedBranch" ng-change="changeList()" class="form-control">
+                <option ng-repeat="branch in branches"
+                        value="{{ branch.Id }}">
+                    {{ branch.Name }}
+                </option>
+
+            </select>
+        </div>
+        @{
+            var urlAdd = Url.Action("Create", "Projects", new { branchId = "{{ selectedBranch }}" });
+            urlAdd = HttpUtility.UrlDecode(urlAdd);
+        }
+        <a data-ng-href="@urlAdd" class="btn btn-sm btn-small btn-primary">Add New Project</a>
+        <div class="pull-right" ng-show="loading">
+            <img src="~/Content/loading.gif" width="40" height="30" />
+        </div>
+    </div>
+    <div class="mainbody panel-body" style="overflow: auto">
+        <table class="table table-hover table-bordered">
+            <thead>
+                <tr style="color: salmon; font-weight: bold">
+                    <th>#</th>
+                    <th>
+                        Project Id
+                    </th>
+                    <th>
+                        Project Name
+                    </th>
+                    <th>
+                        Project Type
+                    </th>
+                    <th>
+                        Manager
+                    </th>
+                    <th>
+                        Project Serial
+                    </th>
+                    <th>
+                        Status
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="proj in projs">
+                    <td>{{$index+1}}</td>
+                    <td>{{proj.ProjectId}}</td>
+                    <td>{{proj.Name}}</td>
+                    <td>{{proj.Type.Name}}</td>
+                    <td>{{proj.Manager.Code}}</td>
+                    <td>{{proj.Serial}}</td>
+                    <td>{{proj.Status.Status}}</td>
+                    <td>
+                        @{
+                            var urlEdit = Url.Action("Edit", "Projects", new { id = "{{ proj.Id }}" });
+                            urlEdit = HttpUtility.UrlDecode(urlEdit);
+
+                            var urlDetails = Url.Action("Details", "Projects", new { id = "{{ proj.Id }}" });
+                            urlDetails = HttpUtility.UrlDecode(urlDetails);
+                        }
+                        <a data-ng-href="@urlEdit" class="btn btn-primary btn-small btn-sm">Edit</a> |
+                        <a data-ng-href="@urlDetails" class="btn btn-warning btn-small btn-sm">Details</a> |
+                        <button class="btn btn-danger btn-small btn-sm"
+                                ng-click="deleteProj(proj)">
+                            Delete
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    var app = angular.module('app', ['ngBootbox']);
+    app.controller('ProjCtr', ['$scope', '$ngBootbox', 'ProjService', ProjCtr]);
+    app.factory('ProjService', ['$http', function ($http) {
+
+        return {
+
+            getCountry: function () {
+                return $http.get('/System/Users/GetCountry');
+            },
+
+            getBranch: function (id) {
+                return $http.get('/System/Users/GetBranch/' + id);
+            },
+
+            getProjs: function (id) {
+                return $http.get('/Projects/GetProjects/' + id);
+            },
+            deleteProj: function (id) {
+                return $http.get('/projects/deleteproj/' + id);
+            }
+
+        };
+    }]);
+
+    function ProjCtr($scope, $ngBootbox, ProjService) {
+
+
+        ProjService.getCountry().
+            then(function (res) {
+                $scope.$emit('LOAD');
+                $scope.countries = res.data;
+                $scope.selectedCountry = $scope.countries[0].Id.toString();
+
+                ProjService.getBranch(parseInt($scope.selectedCountry)).
+                    then(function (res) {
+                        $scope.branches = res.data;
+                        $scope.selectedBranch = res.data[0].Id.toString();
+
+
+                        ProjService.getProjs($scope.selectedBranch).
+                            then(function (res) {
+                                $scope.projs = res.data;
+                                $scope.$emit('UNLOAD');
+                            });
+
+
+                    });
+            });
+
+        $scope.changeBranch = function () {
+            $scope.$emit('LOAD');
+            ProjService.getBranch(parseInt($scope.selectedCountry)).
+                then(function (res) {
+
+                    $scope.branches = res.data;
+                    $scope.selectedBranch = res.data[0].Id.toString();
+                    $scope.$emit('UNLOAD');
+                });
+        }
+
+
+
+        $scope.changeList = function () {
+            $scope.$emit('LOAD');
+            $scope.projs = null;
+            ProjService.getProjs($scope.selectedBranch).
+                then(function (res) {
+
+                    $scope.projs = res.data;
+                    $scope.$emit('UNLOAD');
+                });
+        }
+
+
+
+        $scope.deleteProj = function (proj) {
+            $scope.$emit('LOAD');
+            $ngBootbox.confirm('Delete Project : ' + proj.ProjectId)
+                .then(function () {
+                    ProjService.deleteProj(proj.Id)
+                        .then(function (res) {
+
+                            if (res.data === 'Done')
+                                $scope.projs.splice($scope.projs.indexOf(proj), 1);
+                            else
+                                $ngBootbox.alert("Some thing went wrong");
+                            $scope.$emit('UNLOAD');
+                        });
+                });
+        }
+
+        $scope.$on('LOAD', function () {
+            $scope.loading = true;
+
+        });
+        $scope.$on('UNLOAD', function () {
+            $scope.loading = false;
+
+        });
+    }
+</script>

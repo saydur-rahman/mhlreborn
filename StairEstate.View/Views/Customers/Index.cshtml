@@ -1,0 +1,226 @@
+﻿@model IEnumerable<StairEstate.Entity.sales_customer>
+
+@{
+    Layout = "~/Views/Shared/_InnerLayout.cshtml";
+}
+
+<div class="parentDiv panel navbar navbar-fixed" ng-app="app" ng-controller="CusCtr">
+    <div class="head form-inline panel-heading">
+        <label style="color: black">Country</label>
+        <div class="form-group m-b--10">
+            <select ng-model="selectedCountry" ng-change="changeBranch()" class="form-control">
+                <option ng-repeat="country in countries"
+                        value="{{ country.Id }}"
+                        ng-selected="{{ country.Selected == true }}">
+                    {{ country.Name }}
+                </option>
+
+            </select>
+        </div>
+
+
+
+        <label style="color: black">Branch</label>
+        <div class="form-group m-b--10">
+            <select ng-model="selectedBranch" ng-change="changeList()" class="form-control">
+                <option ng-repeat="branch in branches"
+                        value="{{ branch.Id }}"
+                        ng-selected="{{ branch.Selected == true }}">
+                    {{ branch.Name }}
+                </option>
+
+            </select>
+        </div>
+        @{
+        var urlAdd = Url.Action("Create", "Customers", new { branchId = "{{ selectedBranch }}" });
+        urlAdd = HttpUtility.UrlDecode(urlAdd);
+        }
+        <a data-ng-href="@urlAdd" class="btn btn-sm btn-small btn-primary">Add New Customer</a>
+        <div class="pull-right" ng-show="loading">
+            <img src="~/Content/loading.gif" width="40" height="30" />
+        </div>
+    </div>
+
+    <div class="mainbody panel-body" style="overflow: auto">
+        <table class="table table-hover table-bordered">
+            <thead>
+                <tr>
+                    <th style="color: salmon; font-weight: bold">#</th>
+                    <th>
+                        Customer Code
+                    </th>
+                    <th>
+                        Full Name
+                    </th>
+                    <th>
+                        Mobile no.
+                    </th>
+                    <th>
+                        Date of Birth
+                    </th>
+                    <th>
+                        Current Address
+                    </th>
+                    <th>
+                        Sales Person
+                    </th>
+                    <th>
+                        Collector
+                    </th>
+                    <th>
+                        Profession
+                    </th>
+
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="cus in cuss">
+                    <td>{{$index+1}}</td>
+                    <td>{{cus.Code}}</td>
+                    <td>{{cus.Name}}</td>
+                    <td>{{cus.Phone}}</td>
+                    <td>{{cus.Dob}}</td>
+                    <td>{{cus.AddPre}}</td>
+                    <td>{{cus.SalesPerson.Code}}</td>
+                    <td>{{cus.Collector.Code}}</td>
+                    <td>{{cus.Profession.Name}}</td>
+                    <td>
+
+                        @{
+            var urlEdit = Url.Action("Edit", "Customers", new { id = "{{ cus.Id }}" });
+            urlEdit = HttpUtility.UrlDecode(urlEdit);
+
+            var urlDetails = Url.Action("Details", "Customers", new { id = "{{ cus.Id }}" });
+            urlDetails = HttpUtility.UrlDecode(urlDetails);
+                        }
+                        <a data-ng-href="@urlEdit" class="btn btn-primary btn-small btn-sm">Edit</a> |
+                        @*<a data-ng-href="@urlDetails" class="btn btn-warning btn-small btn-sm">Details</a> |*@
+                        <button class="btn btn-danger btn-small btn-sm"
+                                ng-click="deleteCus(cus)">
+                            Delete
+                        </button>
+
+
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+<script>
+    var app = angular.module('app', ['ngBootbox']);
+    app.controller('CusCtr', ['$scope', '$ngBootbox', 'CusService', CusCtr]);
+    app.factory('CusService', ['$http', function ($http) {
+
+        return {
+            //getAllType: function () {
+            //    return $http.get('/System/UserPermission/GetAllUserTypes');
+            //},
+            //getMenuForUser: function (id) {
+            //    return $http.get('/System/UserPermission/GetMenuForUser/' + id);
+            //}
+            getCountry: function () {
+                return $http.get('/System/Users/GetCountry');
+            },
+
+            getBranch: function (id) {
+                return $http.get('/System/Users/GetBranch/' + id);
+            },
+            getCus: function (branchId) {
+                return $http.get('/Customers/getcus/' + branchId);
+            },
+            deleteCus: function (id) {
+                return $http.get('/Customers/DeleteCus/' + id);
+            }
+        };
+    }]);
+
+    function CusCtr($scope, $ngBootbox, CusService) {
+
+
+        CusService.getCountry().
+            then(function (res) {
+                $scope.$emit('LOAD');
+                $scope.countries = res.data;
+                $scope.selectedCountry = $scope.countries[0].Id.toString();
+
+                CusService.getBranch(parseInt($scope.selectedCountry)).
+                    then(function (res) {
+                        $scope.$emit('LOAD');
+                        $scope.branches = res.data;
+                        $scope.selectedBranch = res.data[0].Id.toString();
+                        CusService.getCus($scope.selectedBranch).
+                            then(function (res) {
+                                $scope.cuss = res.data;
+                                $scope.$emit('UNLOAD');
+                            });
+                    });
+            });
+
+        $scope.changeBranch = function () {
+            CusService.getBranch(parseInt($scope.selectedCountry)).
+                then(function (res) {
+                    $scope.$emit('LOAD');
+                    $scope.branches = res.data;
+                    $scope.selectedBranch = res.data[0].Id.toString();
+                    $scope.$emit('UNLOAD');
+                });
+        }
+
+        //$scope.changeBranch = function () {
+        //    CusService.getBranch($scope.selectedCountry).
+        //        then(function (res) {
+        //            $scope.$emit('LOAD');
+        //            $scope.branches = res.data;
+        //            $scope.selectedBranch = res.data[0].Id.toString();
+        //            $scope.$emit('UNLOAD');
+        //        });
+        //}
+
+        //CusService.getCus($scope.selectedBranch).
+        //    then(function (res) {
+        //        $scope.$emit('LOAD');
+        //        $scope.cuss = res.data;
+        //        $scope.$emit('UNLOAD');
+        //    });
+
+
+        $scope.changeList = function () {
+            $scope.$emit('LOAD');
+            $scope.cuss = null;
+            CusService.getCus($scope.selectedBranch).
+                then(function (res) {
+                    
+                    $scope.cuss = res.data;
+                    $scope.$emit('UNLOAD');
+                });
+        }
+
+        $scope.deleteCus = function (cus) {
+            $ngBootbox.confirm('Delete Collector: ' + cus.Code)
+                .then(function () {
+                    CusService.deleteCus(cus.Id)
+                        .then(function (res) {
+                            $scope.$emit('LOAD');
+                            if (res.data === 'Done')
+                                $scope.cuss.splice($scope.cuss.indexOf(cus), 1);
+                            else
+                                $ngBootbox.alert("Some thing went wrong");
+                            $scope.$emit('UNLOAD');
+                        });
+                });
+        }
+
+        $scope.$on('LOAD', function () {
+            $scope.loading = true;
+
+        });
+        $scope.$on('UNLOAD', function () {
+            $scope.loading = false;
+
+        });
+    }
+</script>

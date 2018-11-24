@@ -1,0 +1,199 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_InnerLayout.cshtml";
+}
+@*<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap.min.css"/>*@
+
+
+<div class="parentDiv panel navbar navbar-fixed" ng-app="app" ng-controller="LandCtr">
+    <div class="head form-inline panel-heading" style="color: black">
+        <label style="color: black">Country</label>
+        <div class="form-group m-b--10">
+            <select ng-model="selectedCountry"
+                    ng-change="changeBranch()"
+                    class="form-control">
+                @*<option value="-1">All</option>*@
+                <option ng-repeat="country in countries"
+                        value="{{ country.Id }}">
+                    {{ country.Name }}
+                </option>
+
+            </select>
+        </div>
+
+
+
+        <label style="color: black">Branch</label>
+        <div class="form-group m-b--10">
+            <select ng-model="selectedBranch" ng-change="changeList()" class="form-control">
+
+                <option ng-repeat="branch in branches"
+                        value="{{ branch.Id }}">
+                    {{ branch.Name }}
+                </option>
+
+            </select>
+        </div>
+        @{
+            var urlAdd = Url.Action("Create", "LandMasters", new { id = "{{ selectedBranch }}" });
+            urlAdd = HttpUtility.UrlDecode(urlAdd);
+        }
+        <a href="@urlAdd" class="btn btn-sm btn-small btn-primary">Add Land Master</a>
+
+        <div class="pull-right" ng-show="loading">
+            <img src="~/Content/loading.gif" width="40" height="30" />
+        </div>
+    </div>
+    <div class="mainbody panel-body" style="overflow: auto">
+        <table class="table table-responsive table-striped table-bordered col-sm-10" id="tableLM">
+            <thead>
+                <tr style="color: salmon; font-weight: bold">
+                    <th>#</th>
+                    <th>Land Id</th>
+                    <th>Project Name</th>
+                    <th>Project Type</th>
+                    <th>Number of Lands</th>
+                    <th>Date</th>
+                    <th></th>
+                </tr>
+
+            </thead>
+            <tbody>
+                <tr ng-repeat="landMaster in landMasters">
+                    <td>{{$index+1}}</td>
+                    <td>{{landMaster.LandId}}</td>
+                    <td>{{landMaster.Project.Name}}</td>
+                    <td>{{landMaster.Project.Type}}</td>
+                    <td>{{landMaster.LandCount}}</td>
+                    <td>{{landMaster.Date}}</td>
+                    <td>
+                        @{
+                            var urlEdit = Url.Action("Edit", "LandMasters", new { id = "{{ landMaster.Id }}" });
+                            urlEdit = HttpUtility.UrlDecode(urlEdit);
+
+                            //var urlDetails = Url.Action("Details", "Projects", new { id = "{{ proj.Id }}" });
+                            //urlDetails = HttpUtility.UrlDecode(urlDetails);
+                        }
+                        <a data-ng-href="@urlEdit" class="btn btn-primary btn-small btn-sm">Edit</a> |
+            @*<a data-ng-href="@urlDetails" class="btn btn-warning btn-small btn-sm">Details</a>*@
+                        <button class="btn btn-danger btn-small btn-sm"
+                                ng-click="deleteLM(landMaster)">
+                            Delete
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+@*<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap.min.js"></script>*@
+<script>
+    var app = angular.module('app', ['ngBootbox']);
+    app.controller('LandCtr', ['$scope', '$ngBootbox', 'LandService', LandCtr]);
+    app.factory('LandService', ['$http', function ($http) {
+
+        return {
+
+            getCountry: function () {
+                return $http.get('/System/Users/GetCountry');
+            },
+
+            getBranch: function (id) {
+                return $http.get('/System/Users/GetBranch/' + id);
+            },
+            getLandMasters: function (id) {
+                return $http.get('/landmasters/GetLandMasters/' + id);
+            },
+            deleteLM: function (id) {
+                return $http.get('/landmasters/DeleteLM/' + id);
+            }
+
+        };
+    }]);
+
+    function LandCtr($scope, $ngBootbox, LandService) {
+
+
+        LandService.getCountry().
+            then(function (res) {
+                $scope.$emit('LOAD');
+                $scope.countries = res.data;
+                $scope.selectedCountry = $scope.countries[0].Id.toString();
+
+                LandService.getBranch(parseInt($scope.selectedCountry)).
+                    then(function (res) {
+                        $scope.branches = res.data;
+                        $scope.selectedBranch = res.data[0].Id.toString();
+                        
+
+                        LandService.getLandMasters($scope.selectedBranch)
+                            .then(function (res) {
+
+                                $scope.landMasters = res.data;
+                                $scope.$emit('UNLOAD');
+                            });
+                    });
+            });
+
+
+
+
+        $scope.changeBranch = function () {
+            $scope.$emit('LOAD');
+            LandService.getBranch(parseInt($scope.selectedCountry)).
+                then(function (res) {
+                    $scope.branches = res.data;
+                    alert(res.data);
+                    $scope.selectedBranch = res.data[0].Id.toString();
+                    $scope.$emit('UNLOAD');
+                });
+        }
+
+
+
+        $scope.changeList = function () {
+            $scope.$emit('LOAD');
+            LandService.getLandMasters($scope.selectedBranch)
+                .then(function (res) {
+
+                    $scope.landMasters = res.data;
+                    $scope.$emit('UNLOAD');
+                });
+        }
+
+        $scope.deleteLM = function (lm) {
+            $scope.$emit('LOAD');
+            $ngBootbox.confirm('Delete Land Info: ' + lm.LandId)
+                .then(function () {
+                    LandService.deleteLM(lm.Id)
+                        .then(function (res) {
+                            
+                            if (res.data === 'Done')
+                                $scope.landMasters.splice($scope.landMasters.indexOf(lm), 1);
+                            else
+                                $ngBootbox.alert("Some thing went wrong");
+                            $scope.$emit('UNLOAD');
+                        });
+                });
+        }
+
+
+        $scope.$on('LOAD', function () {
+            $scope.loading = true;
+
+        });
+        $scope.$on('UNLOAD', function () {
+            $scope.loading = false;
+
+        });
+
+
+
+    }
+
+    //$('#tableLM').DataTable();
+</script>

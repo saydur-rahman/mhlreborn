@@ -1,0 +1,59 @@
+﻿@model StairEstate.Entity.proj_road
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_InnerLayout.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>proj_road</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.proj_block.Block_name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.proj_block.Block_name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.prop_unit.Unit_Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.prop_unit.Unit_Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Road_no)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Road_no)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Road_size)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Road_size)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.deleted)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.deleted)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Road_id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

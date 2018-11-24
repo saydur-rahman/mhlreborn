@@ -1,0 +1,157 @@
+﻿@model StairEstate.Entity.sales_stack_holder
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_InnerLayout.cshtml";
+}
+
+<style>
+    fieldset {
+        border: 1px solid #ddd !important;
+        margin: 0;
+        padding: 10px;
+        position: relative;
+        border-radius: 4px;
+        padding-left: 10px !important;
+    }
+
+    legend {
+        font-size: 14px;
+        font-weight: bold;
+        margin-bottom: 0px;
+        width: 35%;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        padding: 5px 5px 5px 10px;
+        background-color: #ffffff;
+    }
+</style>
+
+<div class="parentDiv panel navbar navbar-fixed">
+    <div class="head form-inline panel-heading">
+        <h2>Details of Stack Holder: @Model.stack_holder_name</h2>
+    </div>
+
+    <br />
+    <br />
+
+    <div class="row">
+        @*First Column*@
+        <div class="form-horizontal col-sm-6">
+            <div class="form-group">
+                <label class="control-label col-sm-5" style="text-align: left">Mobile No.</label>
+                <div class="col-md-7">
+                    @Html.EditorFor(model => model.stack_holder_phone, new { htmlAttributes = new { @class = "form-control", @readonly = "" } })
+                    @Html.ValidationMessageFor(model => model.stack_holder_phone, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-sm-5" style="text-align: left">Email</label>
+                <div class="col-sm-7">
+                    @Html.EditorFor(model => model.stack_holder_email, new { htmlAttributes = new { @class = "form-control", @readonly = "" } })
+                    @Html.ValidationMessageFor(model => model.stack_holder_email, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-sm-5" style="text-align: left">Country</label>
+                <div class="col-sm-7">
+                    @Html.DropDownList("stack_holder_country_id", null, htmlAttributes: new { @class = "form-control", @disabled = "" })
+                    @Html.ValidationMessageFor(model => model.stack_holder_country_id, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-sm-5" style="text-align: left">Father or Husband's Name</label>
+                <div class="col-sm-7">
+                    @Html.EditorFor(model => model.stack_holder_Father_name, new { htmlAttributes = new { @class = "form-control", @readonly = "" } })
+                    @Html.ValidationMessageFor(model => model.stack_holder_Father_name, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-sm-5" style="text-align: left">Mother's Name</label>
+                <div class="col-sm-7">
+                    @Html.EditorFor(model => model.stack_holder_mother_name, new { htmlAttributes = new { @class = "form-control", @readonly = "" } })
+                    @Html.ValidationMessageFor(model => model.stack_holder_mother_name, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-sm-5" style="text-align: left">Stack Holder Type</label>
+                <div class="col-sm-7">
+                    @Html.DropDownList("stack_holder_type_id", null, htmlAttributes: new { @class = "form-control", @disabled = "" })
+                    @Html.ValidationMessageFor(model => model.stack_holder_type_id, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-sm-5" style="text-align: left">Present Address</label>
+                <div class="col-sm-7">
+                    <textarea id="stack_holder_pre_address"  readonly="" name="stack_holder_pre_address" class="form-control">@Model.stack_holder_pre_address</textarea>
+                    @Html.ValidationMessageFor(model => model.stack_holder_pre_address, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-sm-5" style="text-align: left">Permanent Address</label>
+                <div class="col-sm-7">
+                    <textarea id="stack_holder_per_address" readonly="" name="stack_holder_per_address" class="form-control">@Model.stack_holder_per_address</textarea>
+                    @Html.ValidationMessageFor(model => model.stack_holder_per_address, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-sm-5" style="text-align: left">National ID</label>
+                <div class="col-sm-7">
+                    @Html.EditorFor(model => model.stack_holder_nid_no, new { htmlAttributes = new { @class = "form-control", @readonly = "" } })
+                    @Html.ValidationMessageFor(model => model.stack_holder_nid_no, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-sm-5" style="text-align: left">Contact Person</label>
+                <div class="col-sm-7">
+                    @Html.EditorFor(model => model.stack_holder_contact_person, new { htmlAttributes = new { @class = "form-control", @readonly = "" } })
+                    @Html.ValidationMessageFor(model => model.stack_holder_contact_person, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-sm-5" style="text-align: left">Contact Person Mobile No.</label>
+                <div class="col-sm-7">
+                    @Html.EditorFor(model => model.stack_holder_contact_person_number, new { htmlAttributes = new { @class = "form-control", @readonly = "" } })
+                    @Html.ValidationMessageFor(model => model.stack_holder_contact_person_number, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+        </div>
+
+        <div class="form-horizontal col-sm-6">
+            <div class="form-group">
+                <div class="col-md-12">
+                    <img id="imgpreview" class="img-polaroid" height="200" width="200" src="@Url.Content(Model.stack_holder_image)" style="border-width: 1px; visibility: visible;" />
+                </div>
+            </div>
+
+            <fieldset class="col-md-11">
+                <legend>Lands</legend>
+                <table class="col-md-12 table table-hover table-bordered">
+                    <thead>
+                        <tr>
+                            <th>District</th>
+                            <th>Thana</th>
+                            <th>Mouja</th>
+                            <th>Area</th>
+                            <th></th>
+                        </tr>
+
+                    </thead>
+                </table>
+            </fieldset>
+
+        </div>
+    </div>
+
+</div>

@@ -1,0 +1,58 @@
+﻿@model IEnumerable<StairEstate.Entity.proj_road>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_InnerLayout.cshtml";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.proj_block.Block_name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.prop_unit.Unit_Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Road_no)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Road_size)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.deleted)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.proj_block.Block_name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.prop_unit.Unit_Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Road_no)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Road_size)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.deleted)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.Road_id }) |
+            @Html.ActionLink("Details", "Details", new { id=item.Road_id }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.Road_id })
+        </td>
+    </tr>
+}
+
+</table>

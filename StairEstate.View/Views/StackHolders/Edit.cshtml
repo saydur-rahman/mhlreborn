@@ -1,0 +1,152 @@
+﻿@model StairEstate.Entity.sales_stack_holder
+
+@{
+    Layout = "~/Views/Shared/_InnerLayout.cshtml";
+}
+
+<div class="parentDiv panel navbar navbar-fixed">
+    <div class="head form-inline panel-heading" style="color: black">
+        <h2>Edit Stack Holder: @Model.stack_holder_name</h2>
+    </div>
+
+    @using (Html.BeginForm("Edit", "StackHolders", FormMethod.Post, new{ enctype = "multipart/form-data"}))
+    {
+        <br />
+        <br />
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(model => model.stack_holder_id)
+        @Html.HiddenFor(model => model.stack_holder_image)
+
+        <div class="row">
+            <div class="form-horizontal col-sm-5">
+
+
+                <div class="form-group">
+                    <label class="control-label col-sm-5" style="text-align: left">Name</label>
+                    <div class="col-sm-7">
+                        @Html.EditorFor(model => model.stack_holder_name, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.stack_holder_name, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-sm-5" style="text-align: left">Mobile No.</label>
+                    <div class="col-md-7">
+                        @Html.EditorFor(model => model.stack_holder_phone, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.stack_holder_phone, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-sm-5" style="text-align: left">Email</label>
+                    <div class="col-sm-7">
+                        @Html.EditorFor(model => model.stack_holder_email, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.stack_holder_email, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-sm-5" style="text-align: left">Country</label>
+                    <div class="col-sm-7">
+                        @Html.DropDownList("stack_holder_country_id", null, htmlAttributes: new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.stack_holder_country_id, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-sm-5" style="text-align: left">Father or Husband's Name</label>
+                    <div class="col-sm-7">
+                        @Html.EditorFor(model => model.stack_holder_Father_name, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.stack_holder_Father_name, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-sm-5" style="text-align: left">Mother's Name</label>
+                    <div class="col-sm-7">
+                        @Html.EditorFor(model => model.stack_holder_mother_name, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.stack_holder_mother_name, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-sm-5" style="text-align: left">Stack Holder Type</label>
+                    <div class="col-sm-7">
+                        @Html.DropDownList("stack_holder_type_id", null, htmlAttributes: new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.stack_holder_type_id, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-sm-1"></div>
+
+            @*Second Column*@
+            <div class="form-horizontal col-sm-5">
+                <div class="form-group">
+                    <label class="control-label col-sm-5" style="text-align: left">Present Address</label>
+                    <div class="col-sm-7">
+                        <textarea id="stack_holder_pre_address" name="stack_holder_pre_address" class="form-control">@Model.stack_holder_pre_address</textarea>
+                        @Html.ValidationMessageFor(model => model.stack_holder_pre_address, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-sm-5" style="text-align: left">Permanent Address</label>
+                    <div class="col-sm-7">
+                        <textarea id="stack_holder_per_address" name="stack_holder_per_address" class="form-control">@Model.stack_holder_per_address</textarea>
+                        @Html.ValidationMessageFor(model => model.stack_holder_per_address, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-sm-5" style="text-align: left">National ID</label>
+                    <div class="col-sm-7">
+                        @Html.EditorFor(model => model.stack_holder_nid_no, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.stack_holder_nid_no, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-sm-5" style="text-align: left">Contact Person</label>
+                    <div class="col-sm-7">
+                        @Html.EditorFor(model => model.stack_holder_contact_person, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.stack_holder_contact_person, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-sm-5" style="text-align: left">Contact Person Mobile No.</label>
+                    <div class="col-sm-7">
+                        @Html.EditorFor(model => model.stack_holder_contact_person_number, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.stack_holder_contact_person_number, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-sm-5" style="text-align: left">Image</label>
+                    <div class="col-md-7">
+                        <img id="imgpreview" height="200" width="200" src="@Url.Content(Model.stack_holder_image)" style="border-width: 1px; visibility: visible;" />
+                        <input type="file" name="imageFile" class="" onchange="showpreview(this);" />
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <br />
+        <div class="row">
+            <input type="submit" class="btn btn-primary btn-small col-sm-1 col-sm-offset-5" value="Update"/>
+        </div>
+    }
+
+    <div>
+        @Html.ActionLink("Back to List", "Index", "StackHolders", null, new { @class = "btn btn-sm btn-small btn-default return" })
+    </div>
+</div>
+
+<script>
+    function showpreview(input) {
+
+        if (input.files && input.files[0]) {
+
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                $('#imgpreview').css('visibility', 'visible');
+                $('#imgpreview').attr('src', e.target.result);
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+
+    }
+</script>

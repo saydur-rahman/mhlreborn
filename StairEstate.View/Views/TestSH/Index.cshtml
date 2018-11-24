@@ -1,0 +1,118 @@
+﻿@model IEnumerable<StairEstate.Entity.sales_stack_holder>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_InnerLayout.cshtml";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.sales_stack_holder_type.stack_holder_type)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.sys_country.name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.stack_holder_name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.stack_holder_phone)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.stack_holder_email)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.stack_holder_Father_name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.stack_holder_mother_name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.stack_holder_contact_person)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.stack_holder_contact_person_number)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.stack_holder_pre_address)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.stack_holder_per_address)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.stack_holder_nid_no)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.stack_holder_Dob)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.stack_holder_image)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.deleted)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.sales_stack_holder_type.stack_holder_type)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.sys_country.name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.stack_holder_name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.stack_holder_phone)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.stack_holder_email)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.stack_holder_Father_name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.stack_holder_mother_name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.stack_holder_contact_person)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.stack_holder_contact_person_number)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.stack_holder_pre_address)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.stack_holder_per_address)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.stack_holder_nid_no)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.stack_holder_Dob)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.stack_holder_image)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.deleted)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.stack_holder_id }) |
+            @Html.ActionLink("Details", "Details", new { id=item.stack_holder_id }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.stack_holder_id })
+        </td>
+    </tr>
+}
+
+</table>

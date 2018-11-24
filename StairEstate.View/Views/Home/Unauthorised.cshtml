@@ -1,0 +1,28 @@
+﻿
+@{
+    ViewBag.Title = "Unauthorised";
+    Layout = "~/Views/Shared/_InnerLayout.cshtml";
+}
+
+<div ng-app="app" ng-controller="UserCtr">UNAUTHORISED</div>
+
+<script>
+    var app = angular.module('app', ['ngBootbox']);
+    app.controller('UserCtr', ['$scope', '$ngBootbox', 'UserService', UserCtr]);
+    app.factory('UserService', ['$http', function ($http) {
+
+        return {
+            
+
+        };
+    }]);
+
+    function UserCtr($scope, $ngBootbox, UserService) {
+
+        $ngBootbox.confirm('You are not authorized to view this page!')
+            .then(function() {
+                window.location.replace('/Home/login');
+            });
+
+    }
+</script>

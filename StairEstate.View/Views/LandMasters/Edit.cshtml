@@ -1,0 +1,688 @@
+﻿@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_InnerLayout.cshtml";
+}
+
+
+<div class="parentDiv panel navbar navbar-fixed" ng-app="app" ng-controller="LandCtr">
+    <div class="head form-inline panel-heading" style="color: black">
+        <h2>Land Basic Info</h2>
+    </div>
+
+    <form>
+        <br />
+        <br />
+
+
+        @*first row*@
+        <div class="row">
+            @*first col*@
+            <div class="form-horizontal col-sm-5">
+                <div class="form-group">
+                    <label class="control-label col-sm-5" style="text-align: left">Project Type</label>
+                    <div class="col-sm-7">
+                        <select ng-model="SelectedType"
+                                ng-change="changeProject()"
+                                class="form-control">
+
+                            <option ng-repeat="pt in pts"
+                                    value="{{pt.Id}}">
+                                {{pt.Name}}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-sm-5" style="text-align: left">Project Name</label>
+                    <div class="col-sm-7">
+                        <select ng-model="SelectedProject"
+                                ng-change="setProjectId()"
+                                class="form-control">
+
+                            <option ng-repeat="proj in projs"
+                                    value="{{proj.Id}}">
+                                {{proj.Name}}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-1"></div>
+
+            @*second col*@
+            <div class="form-horizontal col-md-5">
+                <div class="form-group">
+                    <label class="control-label col-sm-3" style="text-align: left">Land ID</label>
+                    <div class="col-sm-7">
+                        <input type="text" name="" id="landId" readonly="" class="form-control" ng-model="landBasicInfo.LandMasterId" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br />
+
+        @*second row*@
+        <div class="row">
+            <div class="form-horizontal col-sm-5">
+                <div class="form-group">
+                    <label class="control-label col-sm-5" style="text-align: left">Land Owner</label>
+                    <div class="col-sm-7">
+                        <select ng-model="SelectedOwner"
+                                class="form-control col-sm-10">
+                            <option ng-repeat="own in owns"
+                                    value="{{own}}">
+                                {{own.Name}}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <button class="btn btn-small" type="button">+</button>
+            <button class="btn btn-small" type="button" ng-click="addOwner(SelectedOwner)">Add Land Owner</button>
+
+        </div>
+        @*third row*@
+        <div class="row">
+            <div class="col-sm-7">
+                <table class="col-sm-8 col-sm-offset-4 table-bordered">
+                    <thead>
+                        <tr style="font-weight: bold">
+                            <th>Owner name</th>
+                            <th>Mobile no.</th>
+                            <th>Action</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+                        <tr ng-repeat="ao in addedOwners track by $index">
+                            <td>{{ ao.Name }}</td>
+                            <td>{{ ao.Phone }}</td>
+                            <td>
+                                <button type="button" class="" aria-label="Close" ng-click="removeOwner(ao)">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <br />
+
+        @*Forth row*@
+        <div class="row">
+            <div class="form-horizontal col-sm-5">
+                <div class="form-group">
+                    <label class="control-label col-sm-5" style="text-align: left">Land Media</label>
+                    <div class="col-sm-7 row">
+                        <select ng-model="SelectedMedia"
+                                class="form-control">
+                            <option ng-repeat="media in medias"
+                                    value="{{media}}">
+                                {{media.Name}}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <button class="btn btn-small" type="button">+</button>
+            <button class="btn btn-small" type="button" ng-click="addMedia(SelectedMedia)">Add Land Media</button>
+
+        </div>
+        @*fifth row*@
+        <div class="row">
+            <div class="col-sm-7">
+                <table class="col-sm-8 col-sm-offset-4 table-bordered">
+                    <thead>
+                        <tr style="font-weight: bold">
+                            <th>Media name</th>
+                            <th>Mobile no.</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="addedMedia in addedMedias track by $index">
+                            <td>{{addedMedia.Name}}</td>
+                            <td>{{addedMedia.Phone}}</td>
+                            <td>
+                                <button type="button" class="" aria-label="Close" ng-click="removeMedia(addedMedia)">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+
+        <br />
+        <br />
+
+        @*sixth row*@
+        <div class="row">
+            @*first col*@
+            <div class="form-horizontal col-sm-5">
+                <div class="form-group">
+                    <label class="control-label col-sm-5" style="text-align: left">District</label>
+                    <div class="col-sm-7">
+                        <select ng-model="selectedDistrict"
+                                ng-change="changeThana()"
+                                class="form-control">
+                            <option ng-repeat="dist in dists"
+                                    value="{{dist.Id}}">
+                                {{dist.Name}}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-sm-5" style="text-align: left">Thana</label>
+                    <div class="col-sm-7">
+                        <select ng-model="selectedThana"
+                                ng-change="changeMouza()"
+                                class="form-control">
+                            <option ng-repeat="thana in thanas"
+                                    value="{{thana.Id}}">
+                                {{thana.Name}}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-sm-5" style="text-align: left">Mouja</label>
+                    <div class="col-sm-7">
+                        <input type="button" value="+" style="float: right" class="btn btn-small" />
+                        <div style="overflow: hidden; padding-right: .5em;">
+                            <select ng-model="SelectedMouza"
+                                    class="form-control col-sm-6"
+                                    style="width: 100%;">
+                                <option ng-repeat="mouza in mouzas"
+                                        value="{{mouza.Id}}">
+                                    {{mouza.Name}}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="form-horizontal col-sm-1"></div>
+            @*second col*@
+            <div class="form-horizontal col-sm-6">
+                <div class="form-group">
+                    <label class="control-label col-sm-5" style="text-align: left">JL. No.</label>
+                    <div class="col-sm-6">
+                        <input ng-model="JLNo" type="text" class="form-control" name="" id="" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-sm-5" style="text-align: left">Khatian No.</label>
+                    <div class="col-sm-6">
+                        <input ng-model="KhatianNo" type="text" class="form-control" name="" id="" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-sm-5" style="text-align: left">Dag No.</label>
+                    <div class="col-sm-6">
+                        <input ng-model="DagNo" type="text" class="form-control" name="" id="" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-sm-5" style="text-align: left">Land Area</label>
+                    <div class="col-sm-6 row">
+                        <select ng-model="SelectedUnit"
+                                class=""
+                                style="float: right">
+                            <option ng-repeat="unit in units"
+                                    value="{{unit.Id}}"
+                                    selected="">
+                                {{unit.Name}}
+                            </option>
+                        </select>
+                        <div style="overflow: hidden; padding-right: .5em;">
+                            <input ng-model="Area" type="text" style="width: 100%;" class="form-control col-xs-2" name="" id="" />
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-sm-5" style="text-align: left">Rate As Per Dag</label>
+                    <div class="col-sm-6">
+                        <label class="" style="float: right">
+                            Taka
+                        </label>
+                        <div style="overflow: hidden; padding-right: .5em;">
+                            <input ng-model="Rate" type="text" style="width: 100%;" class="form-control col-xs-2" name="" id="" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="row">
+            <span></span>
+            <span></span>
+            <button ng-click="AddLand()"
+                    type="button"
+                    class="btn btn-small btn-default col-sm-offset-5">
+                Add
+            </button> |
+            <button ng-click="ClearField()"
+                    type="button"
+                    class="btn btn-small btn-default">
+                Clear
+            </button>
+        </div>
+
+
+        <br />
+        <div class="row">
+            <div class="col-sm-offset-1">
+                <table class="table-bordered col-sm-10">
+                    <thead>
+                        <tr style="font-weight: bold">
+                            <th>#</th>
+                            <th>Mouza</th>
+                            <th>Thana</th>
+                            <th>District</th>
+                            <th>JL No</th>
+                            <th>Khatian No</th>
+                            <th>Dag No</th>
+                            <th>Land Area(Dec)</th>
+                            <th>Rate</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="l in landBasicInfo.Lands track by $index">
+                            <td>{{$index+1}}</td>
+                            <td>{{l.Mouza}}</td>
+                            <td>{{l.Thana}}</td>
+                            <td>{{l.District}}</td>
+                            <td>{{l.JLNo}}</td>
+                            <td>{{l.KhatianNo}}</td>
+                            <td>{{l.Dag}}</td>
+                            <td>{{l.Area}}</td>
+                            <td>{{l.Rate}}</td>
+                            <td>
+                                <button type="button" class="" aria-label="Close" ng-click="landClick(l)">
+                                    <span aria-hidden="true">Load</span>
+                                </button>
+                                <button type="button" class="" aria-label="Close" ng-click="removeLand(l)">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td style="font-weight: bold; text-align: right">Total: </td>
+                            <td style="font-weight: bold"> {{ getTotalRate() }} Taka</td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <br />
+        <div class="row">
+            <div class="col-sm-offset-5">
+                <button class="btn btn-primary" type="button" ng-click="submit()">Save</button>
+            </div>
+        </div>
+
+
+    </form>
+
+
+</div>
+
+<script>
+    var app = angular.module('app', ['ngBootbox']);
+    app.controller('LandCtr', ['$scope', '$ngBootbox', 'LandService', LandCtr]);
+    app.factory('LandService',
+        [
+            '$http', function($http) {
+
+                return {
+                    getProjectTypes: function() {
+                        return $http.get('/LandMasters/GetProjectTypes');
+                    },
+                    getProjects: function(id) {
+                        return $http.get('/LandMasters/GetProjects/' + id);
+                    },
+                    getOwners: function() {
+                        return $http.get('/LandMasters/GetLandOwners');
+                    },
+                    getMedias: function() {
+                        return $http.get('/LandMasters/GetMedias');
+                    },
+                    getDistricts: function() {
+                        return $http.get('/mouzas/getDistricts');
+                    },
+                    getThanas: function(id) {
+                        return $http.get('/mouzas/getThanas/' + id);
+                    },
+                    getMouzas: function(id) {
+                        return $http.get('/mouzas/getMouzas/' + id);
+                    },
+                    getUnits: function(id) {
+                        return $http.get('/LandMasters/getUnits');
+                    },
+                    sendLandMasterPost: function(landBasicInfo) {
+                        return $http.post('/LandMasters/CreateLandBasicInfo', landBasicInfo);
+                    },
+                    getLandMaster: function(id) {
+                        return $http.post('/LandMasters/GetLandMaster/' + id);
+                    },
+                    getMouzaDetails: function (id) {
+                        return $http.get('/mouza/GetMouzaDetails/' + id);
+                    }
+
+                };
+            }
+        ]);
+
+    function LandCtr($scope, $ngBootbox, LandService) {
+        $scope.landBasicInfo = {};
+        $scope.addedOwners = [];
+        $scope.addedMedias = [];
+        $scope.landBasicInfo.Lands = [];
+        var land = {};
+        var id = 0;
+        var m = {};
+        var t = {};
+        var d = {};
+        var mId = {};
+        var dId = {};
+        var tId = {};
+
+
+
+        var getLm = function() {
+            LandService.getLandMaster(@ViewBag.landLmId)
+                .then(function(res) {
+                    $scope.landBasicInfo = res.data;
+                    console.log($scope.landBasicInfo);
+                    id = res.data.Id;
+                    LandService.getProjectTypes()
+                        .then(function(res1) {
+                            $scope.pts = res1.data;
+                            $scope.SelectedType = JSON.stringify($scope.landBasicInfo.ProjectTypeId);
+
+                            LandService.getProjects($scope.SelectedType)
+                                .then(function(res2) {
+                                    $scope.projs = res2.data;
+                                    $scope.SelectedProject = JSON.stringify($scope.landBasicInfo.ProjectId);
+                                });
+                        });
+                });
+
+
+            LandService.getUnits()
+                .then(function(res) {
+                    $scope.units = res.data;
+
+                    $scope.SelectedUnit = '1';
+                });
+        }
+        LandService.getOwners()
+            .then(function(res) {
+                $scope.owns = res.data;
+            });
+        LandService.getMedias()
+            .then(function(res) {
+                $scope.medias = res.data;
+            });
+
+        LandService.getDistricts()
+            .then(function(res) {
+                $scope.dists = res.data;
+            });
+        $scope.changeThana = function() {
+            LandService.getThanas($scope.selectedDistrict)
+                .then(function(res) {
+                    $scope.thanas = res.data;
+                });
+        }
+        $scope.changeMouza = function() {
+            LandService.getMouzas($scope.selectedThana)
+                .then(function(res) {
+                    $scope.mouzas = res.data;
+                });
+        }
+
+        $scope.addMedia = function(media) {
+            let found = false;
+            for (let i = 0; i < $scope.addedMedias.length; i++) {
+                if ($scope.addedMedias[i].Id === JSON.parse(media).Id) {
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                $scope.addedMedias.push(JSON.parse(media));
+            }
+            $scope.SelectedMedia = null;
+        }
+        $scope.addOwner = function(owner) {
+            let found = false;
+            for (let i = 0; i < $scope.addedOwners.length; i++) {
+                if ($scope.addedOwners[i].Id === JSON.parse(owner).Id) {
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                $scope.addedOwners.push(JSON.parse(owner));
+            }
+
+            $scope.SelectedOwner = null;
+        }
+
+
+        LandService.getUnits()
+            .then(function(res) {
+                $scope.units = res.data;
+
+                $scope.SelectedUnit = '1';
+            });
+
+
+        //Load Districts
+        LandService.getDistricts()
+            .then(function(res) {
+                $scope.dists = res.data;
+                $scope.selectedDistrict = JSON.stringify(res.data[0].Id);
+
+                LandService.getThanas($scope.selectedDistrict)
+                    .then(function(res1) {
+                        $scope.thanas = res1.data;
+                        $scope.selectedThana = JSON.stringify(res1.data[0].Id);
+
+                        LandService.getMouzas($scope.selectedThana)
+                            .then(function(res2) {
+                                $scope.mouzas = res2.data;
+                                $scope.SelectedMouza = JSON.stringify(res2.data[0].Id);
+
+                            });
+                    });
+            });
+
+        //Load THana
+        $scope.changeThana = function() {
+            LandService.getThanas($scope.selectedDistrict.Id)
+                .then(function(res) {
+                    $scope.thanas = res.data;
+                });
+        }
+        //Load Thana
+        $scope.changeMouza = function() {
+            LandService.getMouzas($scope.selectedThana)
+                .then(function(res) {
+                    $scope.mouzas = res.data;
+                });
+        }
+
+
+        $scope.landClick = function(obj) {
+            $scope.addedOwners = obj.Owners;
+            $scope.addedMedias = obj.Medias;
+            $scope.JLNo = obj.JLNo;
+            $scope.KhatianNo = obj.KhatianNo;
+            $scope.DagNo = obj.Dag;
+            $scope.SelectedUnit = JSON.stringify(obj.UnitId).toString();
+            $scope.Area = obj.Area;
+            $scope.Rate = obj.Rate;
+            LandService.getMouzas($scope.selectedThana)
+                .then(function(res) {
+                    $scope.mouzas = res.data;
+                    $scope.SelectedMouza = JSON.stringify(obj.MouzaId);
+                });
+
+            land.Id = JSON.parse(obj.Id);
+            m = obj.Mouza;
+            t = obj.Thana;
+            d = obj.District;
+            mId = obj.MouzaId;
+            tId = obj.ThanaId;
+            dId = obj.DistrictId;
+        }
+
+        $scope.AddLand = function () {
+            land.Owners = $scope.addedOwners;
+            $scope.addedOwners = [];
+            land.Medias = $scope.addedMedias;
+            $scope.addedMedias = [];
+            land.JLNo = JSON.parse($scope.JLNo);
+            $scope.JLNo = null;
+            land.KhatianNo = JSON.parse($scope.KhatianNo);
+            $scope.KhatianNo = null;
+            land.Dag = JSON.parse($scope.DagNo);
+            $scope.DagNo = null;
+            land.UnitId = JSON.parse($scope.SelectedUnit);
+            land.Area = JSON.parse($scope.Area)
+            $scope.Area = null;
+            land.Rate = JSON.parse($scope.Rate);
+            $scope.Rate = null;
+
+
+            for (let i = 0; i < $scope.mouzas.length; i++) {
+                if ($scope.SelectedMouza == $scope.mouzas[i].Id)
+                    land.Mouza = $scope.mouzas[i].Name;
+            }
+
+
+            for (let i = 0; i < $scope.thanas.length; i++) {
+                if ($scope.selectedThana == $scope.thanas[i].Id)
+                    land.Thana = $scope.thanas[i].Name;
+
+            }
+
+            for (let i = 0; i < $scope.dists.length; i++) {
+                if ($scope.selectedDistrict == $scope.dists[i].Id)
+                    land.District = $scope.dists[i].Name;
+            }
+
+            land.MouzaId = JSON.parse($scope.SelectedMouza);
+
+            land.DistrictId = dId;
+            land.ThanaId = tId;
+
+            console.log('Lands', land);
+
+            let found = false;
+
+            try {
+                for (let i = 0; $scope.landBasicInfo.Lands.length; i++) {
+                    if ($scope.landBasicInfo.Lands[i].Id
+                        == land.Id) {
+
+                        $scope.landBasicInfo.Lands[i] = land;
+                        found = true;
+                        break;
+                    }
+                }
+            }
+
+            catch (ex) { }
+
+
+
+            if (!found) {
+                $scope.landBasicInfo.Lands.push(land);
+            }
+
+            console.log('LandAdd', $scope.landBasicInfo);
+            land = {};
+            m = {};
+            t = {};
+            d = {};
+
+        }
+
+        $scope.ClearField = function() {
+            land.Id = null;
+            $scope.addedOwners = [];
+            $scope.addedMedias = [];
+            $scope.JLNo = null;
+            $scope.KhatianNo = null;
+            $scope.Area = null;
+            $scope.Rate = null;
+            $scope.DagNo = null;
+        }
+
+        $scope.removeMedia = function(media) {
+            $scope.addedMedias.splice($scope.addedMedias.indexOf(media), 1);
+        }
+
+        $scope.removeOwner = function(owner) {
+            $scope.addedOwners.splice($scope.addedOwners.indexOf(owner), 1);
+        }
+
+        $scope.getTotalRate = function() {
+            let total = 0;
+            for (let i = 0; i < $scope.landBasicInfo.Lands.length; i++) {
+                total += parseFloat(JSON.stringify($scope.landBasicInfo.Lands[i].Rate)) *
+                    parseFloat(JSON.stringify($scope.landBasicInfo.Lands[i].Area));
+            }
+
+            return total;
+        }
+
+
+        $scope.changeProject = function() {
+            LandService.getProjects($scope.SelectedType)
+                .then(function(res) {
+                    $scope.projs = res.data;
+                });
+        }
+
+        getLm();
+
+
+        $scope.submit = function () {
+            LandService.sendLandMasterPost($scope.landBasicInfo)
+                .then(function (res) {
+                    console.log(res.data);
+                    if (res.data === 'Done') {
+                        window.location.href = "/project/LandMasters/index";
+
+                    } else {
+                        $ngBootbox.alert("Some values are missing");
+                    }
+                });
+        }
+    }
+</script>

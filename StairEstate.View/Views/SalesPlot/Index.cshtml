@@ -1,0 +1,633 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_InnerLayout.cshtml";
+}
+
+<div class="parentDiv panel navbar navbar-fixed" ng-app="app" ng-controller="salesPlotCtr">
+    <div class="head form-inline panel-heading" style="color: black">
+        <label style="color: black">Plot Sales</label>
+    </div>
+    <div class="form-horizontal ">
+
+        <fieldset class="scheduler-border">
+            <legend class="scheduler-border">Plot Sales</legend>
+            <br />
+            <br />
+            <div class="row">
+                <div class="row">
+                    <div class="col-xs-5">
+                        <div class="form-group">
+                            <label class="control-label col-xs-5" style="text-align: left">Project Name</label>
+                            <div class="col-xs-7">
+                                <select ng-model="postObj.projectId"
+                                        class="form-control">
+                                    <option ng-repeat="pt in pts"
+                                            value="{{pt.Id}}">
+                                        {{pt.Name}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    <div class="col-xs-5 col-xs-offset-1">
+                        <div class="form-group">
+                            <label class="control-label col-xs-5" style="text-align: left">Sales Order No</label>
+                            <div class="col-xs-7">
+                                <input ng-model="postObj.salesOrderNo" class="form-control" type="text" readonly />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-5">
+                        <div class="form-group">
+                            <label class="control-label col-xs-5" style="text-align: left">File No</label>
+                            <div class="col-xs-7">
+                                <div style="float: right">
+                                    <input type="checkbox" /> Manual
+                                </div>
+                                <div style="overflow: hidden; padding-right: .5em;">
+                                    <input ng-model="postObj.fileNo" type="text" class="form-control" readonly />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    <div class="col-xs-5 col-xs-offset-1">
+                        <div class="form-group">
+                            <label class="control-label col-xs-5" style="text-align: left">Invoice No</label>
+                            <div class="col-xs-7">
+                                <input ng-model="postObj.invoiceNo" class="form-control" type="text" readonly />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </fieldset>
+        <fieldset class="scheduler-border">
+            <legend class="scheduler-border">Customer Details</legend>
+            <br />
+            <br />
+            <div class="row">
+                <div class="row">
+                    <div class="col-xs-5">
+                        <div class="form-group">
+                            <label class="control-label col-xs-5" style="text-align: left">Customer</label>
+                            <div class="col-xs-7">
+                                <div style="float: right">
+                                    <button type="button" class="btn btn-default" data-toggle="modal" data-target="">Load All</button>
+                                </div>
+                                <div style="overflow: hidden; padding-right: .5em;">
+                                    <select class="form-control" ng-model="selectedCustomer">
+                                        <option ng-repeat="cus in custs"
+                                                value="{{cus}}">
+                                            {{cus.Name}} - {{cus.Code}}
+                                        </option>
+                                    </select>
+                                </div>
+                                <button class="btn btn-default" ng-click="addCustomer(selectedCustomer, gong)">Add Customer</button>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    <div class="col-xs-5 col-xs-offset-1">
+                        <div class="form-group">
+                            <label class="control-label col-xs-5" style="text-align: left">Customer Role</label>
+                            <div class="col-xs-7">
+                                <select class="form-control" ng-model="gong">
+                                    <option value="-1">--</option>
+                                    <option value="1">Gong</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <table class="col-sm-10 table-bordered table">
+                    <thead>
+                        <tr style="color: salmon; font-weight: bold">
+                            <th>#</th>
+                            <th>Principal</th>
+                            <th>Customer Name</th>
+                            <th>Mobile No</th>
+                            <th>Address</th>
+                            <th>Relation with principal</th>
+                            <th>Gong</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="cus in postObj.custs">
+                            <td>{{$index + 1}}</td>
+                            <td><input type="checkbox" ng-model="postObj.custs[$index].principal" ng-click="checkPrincipal(cus)" /></td>
+                            <td>{{cus.Name}}</td>
+                            <td>{{cus.Phone}}</td>
+                            <td>{{cus.AddPre}}</td>
+                            <td><input type="text" class="form-control" ng-model="postObj.custs[$index].relation" /></td>
+                            <td>{{ cus.gong }}</td>
+                            <td>
+                                <button ng-click="check()">Delete</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </fieldset>
+        <fieldset class="scheduler-border">
+            <legend class="scheduler-border">Sales Details</legend>
+            <div class="col-xs-5">
+                <div class="form-group">
+                    <label class="control-label col-xs-5" style="text-align: left">Sales Type</label>
+                    <div class="col-xs-7">
+                        <select class="form-control" ng-model="postObj.salesType">
+                            <option value="1">Regular</option>
+                            <option value="2">Advanced</option>
+                            <option value="3">Installment</option>
+                            <option value="4">Full Payment</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-5 col-xs-offset-1">
+                <div class="form-group row">
+                    <label class="control-label col-xs-5" style="text-align: left">Invoice Date</label>
+                    <div class="col-xs-7">
+                        <input type="date" class="form-control" ng-model="postObj.invoiceDate" />
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="control-label col-xs-5" style="text-align: left">Sales Person</label>
+                    <div class="col-xs-7">
+                        <select class="form-control" ng-model="postObj.salesPersonId">
+                            <option ng-repeat="salesman in salesMans"
+                                    value="{{salesman.Id}}">
+                                {{salesman.Code}} - {{salesman.Name}}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="control-label col-xs-5" style="text-align: left">Sales Person Department</label>
+                    <div class="col-xs-7">
+                        <select class="form-control" ng-model="postObj.deptId">
+                            <option ng-repeat="dept in depts"
+                                    value="{{dept.Id}}">
+                                {{dept.Name}}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <label class="control-label col-xs-2" style="text-align: left">Remarks</label>
+                <div class="col-xs-9">
+                    <textarea class="form-control" ng-model="postObj.remarks"></textarea>
+                </div>
+            </div>
+            <div class="row col-xs-11">
+                <button type="button" data-toggle="modal" data-target="#advancedSearch" class="btn btn-default col-xs-offset-11">Select Plot</button>
+            </div>
+            <div class="modal fade" id="advancedSearch" role="dialog">
+                <div class="modal-dialog">
+
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" id="close-modal-block" data-dismiss="modal"><strong>&times;</strong></button>
+                            <h4 class="modal-title">Click <strong>&times;</strong> after saving</h4>
+                        </div>
+                        <div class="modal-body">
+
+                            <fieldset class="scheduler-border">
+                                <legend class="scheduler-border">Advanced Plot Search</legend>
+                                <div class="row">
+                                    <div class="from horizontal col-xs-10">
+                                        <div class="form-group">
+                                            <label class="col-xs-5" style="text-align: left">Block/Sector</label>
+                                            <div class="col-xs-7">
+                                                <input type="text" class="form-control" ng-model="search.block" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="from horizontal col-xs-10">
+                                        <div class="form-group">
+                                            <label class="col-xs-5" style="text-align: left">Road</label>
+                                            <div class="col-xs-7">
+                                                <input type="text" class="form-control" ng-model="search.road" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="from horizontal col-xs-10">
+                                        <div class="form-group">
+                                            <label class="col-xs-5" style="text-align: left">Facing</label>
+                                            <div class="col-xs-7">
+                                                <select class="form-control" ng-model="search.facing">
+                                                    <option ng-repeat="f in fs"
+                                                            value="{{f.Id}}">
+                                                        {{f.Name}}
+                                                    </option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="from horizontal col-xs-10">
+                                        <div class="form-group">
+                                            <label class="col-xs-5" style="text-align: left">Plot No</label>
+                                            <div class="col-xs-7">
+                                                <input type="text" class="form-control" ng-model="search.plotNo" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="from horizontal col-xs-10">
+                                        <div class="form-group">
+                                            <label class="col-xs-5" style="text-align: left">Combination Search</label>
+                                            <div class="col-xs-7">
+                                                <input type="text" class="form-control" ng-model="search.combination" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="from horizontal col-xs-10">
+                                        <div class="form-group">
+                                            <label class="col-xs-5" style="text-align: left"></label>
+                                            <div class="col-xs-7">
+                                                <button type="button" class="btn btn-default" ng-click="search()">Search</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <fieldset class="scheduler-border">
+                                <legend class="scheduler-border">Display</legend>
+                                <table class="col-xs-12 table-bordered table">
+                                    <thead>
+                                        <tr style="color: salmon; font-weight: bold">
+                                            <th colspan="2"></th>
+                                            <th>Block</th>
+                                            <th>Road</th>
+                                            <th>Facing</th>
+                                            <th>Size</th>
+                                            <th>Unit</th>
+                                            <th>Plot No</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="b in searchedPlot">
+                                            <td colspan="2"><input type="checkbox" ng-model="searchedPlot[$index].selectedPlot" /></td>
+                                            <td>{{b.Block.Name}}</td>
+                                            <td>{{b.Road.No}}</td>
+                                            <td>{{b.Facing.Name}}</td>
+                                            <td>{{b.Size}}</td>
+                                            <td>{{b.Unit}}</td>
+                                            <td>{{b.PlotNo}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                                <button type="button" class="col-xs-offset-5" ng-click="plotDone()">Done</button>
+                            </fieldset>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+        <fieldset class="scheduler-border">
+            <legend class="scheduler-border">Plot Details</legend>
+            <div class="row">
+                <button type="button" class="btn btn-default col-xs-2">List Of Plots</button>
+                <button type="button" class="btn btn-default col-xs-2">Service</button>
+
+            </div>
+            <div class="row">
+                <table class="col-sm-10 table-bordered table">
+                    <thead>
+                        <tr style="color: salmon; font-weight: bold">
+                            <th colspan="4">Plot Description</th>
+                            <th>Plot No</th>
+                            <th>Size</th>
+                            <th>Rate</th>
+                            <th>Amount</th>
+                            <th>Discount</th>
+                            <th>D. Type</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="p in postObj.plots">
+                            <td colspan="4">{{p.PlotDescription}}</td>
+                            <td>{{p.PlotNo}}</td>
+                            <td>{{p.Size}} {{p.Unit}}</td>
+                            <td><input type="text" class="form-control" value="0" ng-model="postObj.plots[$index].Rate" ng-change="changePlot($index)" /></td>
+                            <td><input type="text" class="form-control" value="0" ng-model="postObj.plots[$index].Amount" readonly /></td>
+                            <td><input type="text" class="form-control" value="0" ng-model="postObj.plots[$index].Discount" ng-change="changePlot($index)" /></td>
+                            <td>
+                                <select class="form-control"
+                                        ng-model="postObj.plots[$index].DiscountType"
+                                        ng-change="changePlot($index)">
+                                    <option value="1">Amount</option>
+                                    <option value="2">Percentage</option>
+                                </select>
+                            </td>
+                            <td>
+                                <button type="button" class="btn btn-danger btn-small">Delete</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="4"></td>
+                            <td></td>
+                            <td></td>
+                            <td>Total:</td>
+                            <td>{{totalAmount}}</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+            <div class="row">
+                <button class="btn btn-primary col-xs-1 col-xs-offset-5" ng-click="add()">Add</button>
+            </div>
+            <br />
+            <br />
+
+            <div class="row">
+                <table class="col-sm-10 table-bordered table">
+                    <thead>
+                        <tr style="color: salmon; font-weight: bold">
+                            <th>Plot Description</th>
+                            <th>Size</th>
+                            <th>Plot No</th>
+                            <th>Discount Amount</th>
+                            <th>Total Amount</th>
+                            <th>D. Type</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+
+
+        </fieldset>
+
+        <div class="row">
+            <div class="col-xs-offset-3">
+                <button class="btn btn-default">Save</button> &nbsp; &nbsp;
+                <button class="btn btn-default">Preview</button> &nbsp; &nbsp;
+                <button class="btn btn-default">Payment Schedule</button> &nbsp; &nbsp;
+                <button class="btn btn-default">Nominee</button> &nbsp; &nbsp;
+                <button class="btn btn-default">Clear</button> &nbsp; &nbsp;
+            </div>
+        </div>
+        <br />
+        <br />
+
+        <div class="row col-xs-11">
+            <table class="col-xs-9 col-xs-offset-1 table-bordered table">
+                <thead>
+                    <tr style="color: salmon; font-weight: bold">
+                        <th>Plot Description</th>
+                        <th>Quantity</th>
+                        <th>Price</th>
+                        <th>Total Amount</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    var app = angular.module('app', ['ngBootbox']);
+    app.controller('salesPlotCtr', ['$scope', '$ngBootbox', 'SPService', salesPlotCtr]);
+    app.factory('SPService',
+        [
+            '$http', function ($http) {
+
+                return {
+                    getProjects: function () {
+                        return $http.get('/LandMasters/GetProjects/1');
+                    },
+                    getFileNo: function () {
+                        return $http.get('/sales/plot/getNextFileNo');
+                    },
+                    getInvoiceNo: function () {
+                        return $http.get('/sales/plot/getNextInvoiceNo');
+                    },
+                    getSalesOrderNo: function () {
+                        return $http.get('/sales/plot/getNextSalesNo');
+                    },
+                    getCustomers: function () {
+                        return $http.get('/Customers/GetCus');
+                    },
+                    getFacing: function () {
+                        return $http.get('/Products/GetFacings/');
+                    },
+                    postSearch: function (obj) {
+                        return $http.post('/sales/plot/plotSearch', obj);
+                    },
+                    getSalesman: function () {
+                        return $http.get('/employees/GetEmp');
+                    },
+                    getDept: function () {
+                        return $http.get('/sales/plot/getDept');
+                    }
+                };
+            }
+        ]);
+
+    function salesPlotCtr($scope, $ngBootbox, SPService) {
+        $scope.gong = '-1';
+        $scope.postObj = {};
+        $scope.postObj.custs = [];
+        $scope.postObj.plots = [];
+        $scope.totalAmount = 0;
+
+
+
+
+        SPService.getProjects()
+            .then(function (res) {
+                $scope.pts = res.data;
+                $scope.postObj.projectId = res.data[0].Id.toString();
+                console.log(res.data[0]);
+            });
+        SPService.getFileNo()
+            .then(function (res) {
+                $scope.postObj.fileNo = res.data;
+            });
+
+        SPService.getInvoiceNo()
+            .then(function (res) {
+                $scope.postObj.invoiceNo = res.data;
+            });
+
+        SPService.getSalesOrderNo()
+            .then(function (res) {
+                $scope.postObj.salesOrderNo = res.data;
+            });
+        SPService.getCustomers()
+            .then(function (res) {
+                $scope.custs = res.data;
+            });
+
+
+
+        $scope.addCustomer = function (obj, gong) {
+            console.log(obj);
+            let a = JSON.parse(obj);
+
+
+
+
+            let found = false;
+            for (let i = 0; i < $scope.postObj.custs.length; i++) {
+                if ($scope.postObj.custs[i].Id === a.Id) {
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                a.gong = 'N';
+                console.log(gong);
+
+                let gongFound = false;
+
+                if (gong == 1) {
+                    for (let i = 0; i < $scope.postObj.custs.length; i++) {
+                        if ($scope.postObj.custs[i].gong === 'Y') {
+                            alert('Gong already selected!');
+                            gongFound = true;
+                            break;
+                        }
+                    }
+
+                    if (!gongFound) {
+                        a.gong = 'Y'
+                    }
+                    else {
+                        a.gong = 'N'
+                    }
+                }
+                $scope.postObj.custs.push(a);
+            }
+        }
+
+        $scope.check = function () {
+            console.log($scope.postObj);
+        }
+
+        $scope.checkPrincipal = function (obj) {
+
+            for (let i = 0; i < $scope.postObj.custs.length; i++) {
+
+                if ($scope.postObj.custs[i].principal == true)
+                    $scope.postObj.custs[i].principal = false;
+                if ($scope.postObj.custs[i].Id == obj.Id) {
+                    $scope.postObj.custs[i].principal = true;
+                }
+            }
+
+        }
+
+        SPService.getFacing()
+            .then(function (res) {
+                $scope.fs = res.data;
+                $scope.search.facing = res.data[0].Id;
+            });
+
+
+        $scope.search = function () {
+            let obj = {
+                block: $scope.search.block,
+                road: $scope.search.road,
+                facing: $scope.search.facing,
+                plotNo: $scope.search.plotNo,
+                projectId: $scope.postObj.projectId
+            }
+
+            SPService.postSearch(obj)
+                .then(function (res) {
+                    $scope.searchedPlot = res.data;
+                });
+        }
+
+
+        SPService.getSalesman()
+            .then(function (res) {
+                $scope.salesMans = res.data;
+                $scope.postObj.salesPersonId = res.data[0].Id.toString();
+            });
+
+        SPService.getDept()
+            .then(function (res) {
+                $scope.depts = res.data;
+                $scope.postObj.deptId = res.data[0].Id.toString();
+
+                $scope.postObj.salesType = '1';
+            });
+
+        $scope.plotDone = function () {
+            for (let i = 0; i < $scope.searchedPlot.length; i++) {
+                if ($scope.searchedPlot[i].selectedPlot == true) {
+                    console.log('found');
+                    $scope.postObj.plots.push($scope.searchedPlot[i]);
+                }
+            }
+
+            for (let i = 0; i < $scope.postObj.plots.length; i++) {
+                $scope.postObj.plots[i].DiscountType = '1';
+            }
+            $('#advancedSearch').modal('hide');
+            console.log($scope.searchedPlot);
+        }
+
+        $scope.changePlot = function (i) {
+            $scope.postObj.plots[i].Amount = 0;
+            if ($scope.postObj.plots[i].Discount == null)
+                $scope.postObj.plots[i].Discount = 0;
+
+            if ($scope.postObj.plots[i].DiscountType == 1)
+                $scope.postObj.plots[i].Amount = $scope.postObj.plots[i].Size * $scope.postObj.plots[i].Rate - $scope.postObj.plots[i].Discount;
+
+            if ($scope.postObj.plots[i].DiscountType == 2)
+                $scope.postObj.plots[i].Amount = ($scope.postObj.plots[i].Size * $scope.postObj.plots[i].Rate - (($scope.postObj.plots[i].Size * $scope.postObj.plots[i].Rate) * $scope.postObj.plots[i].Discount / 100));
+            getAmount();
+        }
+
+        var getAmount = function () {
+            $scope.totalAmount = 0;
+            for (let i = 0; i < $scope.postObj.plots.length; i++) {
+                if ($scope.postObj.plots[i].Amount != null)
+                    $scope.totalAmount += parseInt($scope.postObj.plots[i].Amount);
+            }
+        }
+
+        $scope.add = function () {
+            console.log($scope.postObj);
+        }
+    }
+</script>

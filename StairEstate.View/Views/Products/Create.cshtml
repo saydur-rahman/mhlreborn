@@ -1,0 +1,368 @@
+﻿@model StairEstate.Entity.proj_plot
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_InnerLayout.cshtml";
+}
+
+<div class="parentDiv panel navbar navbar-fixed" ng-app="app" ng-controller="ProdCtr">
+    <div class="head form-inline panel-heading" style="color: black">
+        <h2>Create a new Product for Project: @ViewBag.ProjectName Catagory: @ViewBag.CatName</h2>
+    </div>
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        <span class="col-sm-2"></span>
+        <div class="form-horizontal col-sm-offset-1">
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <br />
+            <br />
+
+            <div class="form-group">
+                <label class="control-label col-sm-2" style="text-align: left">Block</label>
+                <div class="col-sm-4">
+                    <input data-toggle="modal" data-target="#blockModal" type="button" value="+" style="float: right" class="btn btn-small" />
+                    <div style="overflow: hidden; padding-right: .5em;">
+                        <select ng-model="prod.BlockId"
+                                ng-change="changeRoad()"
+                                class="form-control">
+                            <option ng-repeat="block in blocks"
+                                    value="{{block.Id}}">
+                                {{block.Name}}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-sm-2" style="text-align: left">Road No</label>
+                <div class="col-sm-4">
+                    <input id="roadPlusBtn" data-toggle="modal" data-target="#roadModal" type="button" value="+" style="float: right" class="btn btn-small" />
+                    <div style="overflow: hidden; padding-right: .5em;">
+                        <select ng-model="prod.RoadId"
+                                class="form-control"
+                                ng-change="setDesc()">
+                            <option ng-repeat="road in roads"
+                                    value="{{road.Id}}">
+                                {{road.Name}}({{road.Size}})
+                            </option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-sm-2" style="text-align: left">Facing</label>
+                <div class="col-sm-4">
+                    <select ng-model="prod.FacingId"
+                            ng-change="setDesc()"
+                            class="form-control">
+                        <option ng-repeat="f in fs"
+                                value="{{f.Id}}">
+                            {{f.Name}}
+                        </option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-sm-2" style="text-align: left">Size</label>
+                <div class="col-sm-4 row">
+                    <select ng-model="prod.UnitId"
+                            ng-change="setDesc()"
+                            style="float: right">
+                        <option ng-repeat="unit in units"
+                                value="{{unit.Id}}"
+                                selected="">
+                            {{unit.Name}}
+                        </option>
+                    </select>
+                    <div style="overflow: hidden; padding-right: .5em;">
+                        <input ng-model="prod.Size" ng-change="setDesc()" type="text" style="width: 100%;" class="form-control col-xs-2" name="" id="" />
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                <label class="control-label col-sm-2" style="text-align: left">Description</label>
+                <div class="col-sm-4">
+                    <textarea ng-model="prod.Desc"
+                              class="form-control"
+                              ng-cloak>
+                    {{prod.Desc}}
+                    </textarea>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-sm-2" style="text-align: left">Active</label>
+                <div class="col-sm-4">
+                    <select ng-model="prod.Active"
+                            class="form-control">
+                        <option value='true'>
+                            Yes
+                        </option>
+                        <option value='false'>
+                            No
+                        </option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-2" style="text-align: left">Product Type</label>
+                <div class="col-sm-4">
+                    <select ng-model="prod.Type"
+                            class="form-control">
+                        <option ng-repeat="type in types"
+                                value="{{type.Id}}">
+                            {{type.Name}}
+                        </option>
+                    </select>
+                </div>
+            </div>
+
+
+
+
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-1">
+                    <input type="button" value="Create" class="btn btn-primary btn-small" ng-click="Submit()" />
+                </div>
+            </div>
+        </div>
+    }
+
+    <div>
+        @Html.ActionLink("Back to List", "Index", "Products", null, new { @class = "btn btn-sm btn-small btn-default return" })
+    </div>
+</div>
+
+@*block modal*@
+<div class="modal fade" tabindex="-1" id="blockModal" role="dialog" data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" id="close-modal-block" data-dismiss="modal"><strong>&times;</strong></button>
+                <h4 class="modal-title">Click <strong>&times;</strong> after saving</h4>
+            </div>
+            <div class="modal-body">
+                @{
+                    var blockUrl = Url.Action("Create", "Blocks", new { id = @ViewBag.ProjectId });
+                    blockUrl = HttpUtility.UrlDecode(blockUrl);
+                }
+                <iframe src="@blockUrl"></iframe>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+@*road modal*@
+<div class="modal fade" tabindex="-1" id="roadModal" role="dialog" data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" id="close-modal-road" data-dismiss="modal"><strong>&times;</strong></button>
+                <h4 class="modal-title">Click <strong>&times;</strong> after saving</h4>
+            </div>
+            <div class="modal-body">
+
+                <div id="loadIframeRoad"></div>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+<script>
+    var app = angular.module('app', ['ngBootbox']);
+
+    app.controller('ProdCtr', ['$scope', '$ngBootbox', 'ProdService', ProdCtr]);
+    app.factory('ProdService',
+        [
+            '$http', function($http) {
+
+                return {
+                    getBlocks: function(id) {
+                        return $http.get('/blocks/GetBlocks/' + id);
+                    },
+                    getRoads: function(id) {
+                        return $http.get('/Roads/GetRoads/' + id);
+                    },
+                    getFacing: function() {
+                        return $http.get('/Products/GetFacings/');
+                    },
+                    getCurrentPlot: function() {
+                        return $http.get('/Products/getPlot/' + id);
+                    },
+                    postProduct: function(obj) {
+                        return $http.post('/Products/postProduct/', obj);
+                    },
+                    getUnits: function() {
+                        return $http.post('/LandMasters/getUnits');
+                    },
+                    getProdCode: function(pId) {
+                        return $http.get('/products/GetAutoGenProdId/' + pId);
+                    },
+                    getProdType: function() {
+                        return $http.get('/products/getProdTypes');
+                    }
+                };
+            }
+        ]);
+
+    function ProdCtr($scope, $ngBootbox, ProdService) {
+
+        $scope.prod = {};
+        $scope.prod.CatId = @ViewBag.CatId;
+        $scope.prod.BlockId = {};
+        $scope.seletedFacing = {};
+        $scope.seletedRoad = {};
+        $scope.SelectedUnit = {};
+        var id = '@ViewBag.PlotId';
+        var cat = '@ViewBag.CatName'.trim();
+        var blockN = "";
+        var roadN = "";
+        var facingN = "";
+        var sizeN = "";
+        var unitN = "";
+
+        $scope.prod.Active = 'true';
+
+        ProdService.getBlocks()
+            .then(function(res) {
+                $scope.blocks = res.data;
+                $scope.prod.BlockId = res.data[0].Id.toString();
+                $scope.changeRoad();
+                $scope.setDesc();
+            });
+
+        $scope.setBlockName = function() {
+            for (let i = 0; i < $scope.blocks.length; i++) {
+                if ($scope.prod.BlockId === $scope.blocks[i].Id.toString()) {
+                    blockN = $scope.blocks[i].Name.toString().trim();
+                }
+            }
+        }
+
+        $scope.changeRoad = function() {
+            ProdService.getRoads($scope.prod.BlockId)
+                .then(function(res) {
+                    $scope.roads = res.data;
+                    $scope.prod.RoadId = res.data[0].Id.toString();
+
+                    $scope.setDesc();
+                });
+        }
+
+        $scope.setRoadName = function() {
+            for (let i = 0; i < $scope.roads.length; i++) {
+                if ($scope.prod.RoadId === $scope.roads[i].Id.toString()) {
+                    roadN = $scope.roads[i].Name.toString().trim() + "(" + $scope.roads[i].Size.toString().trim() + ")";
+                }
+            }
+        }
+
+        ProdService.getUnits()
+            .then(function(res) {
+                $scope.units = res.data;
+                $scope.prod.UnitId = res.data[0].Id.toString();
+                $scope.setDesc();
+            });
+
+        $scope.setUnitName = function() {
+            for (let i = 0; i < $scope.units.length; i++) {
+                if ($scope.prod.UnitId === $scope.units[i].Id.toString()) {
+                    unitN = $scope.units[i].Name.toString().trim();
+                }
+            }
+        }
+
+        ProdService.getFacing()
+            .then(function(res) {
+                $scope.fs = res.data;
+                $scope.prod.FacingId = res.data[0].Id.toString();
+                $scope.setDesc();
+            });
+
+        $scope.setFacingName = function() {
+            for (let i = 0; i < $scope.fs.length; i++) {
+                if ($scope.prod.FacingId === $scope.fs[i].Id.toString()) {
+                    facingN = $scope.fs[i].Name.toString().trim();
+                }
+            }
+        }
+
+        $scope.prod.Active = 'true';
+
+        ProdService.getProdType()
+            .then(function(res) {
+                $scope.types = res.data;
+                $scope.prod.Type = res.data[0].Id.toString();
+            });
+
+        $scope.setDesc = function () {
+            $scope.setBlockName();
+            $scope.setRoadName();
+            $scope.setUnitName();
+            $scope.setFacingName();
+            if ($scope.prod.Size !== 'undefined')
+                sizeN = $scope.prod.Size;
+
+            $scope.prod.Desc = cat + ' ' + sizeN + ' ' + unitN + ' ' + facingN + ' Sec-' + blockN + ' Road-' + roadN;
+        }
+
+        $scope.Submit = function() {
+            ProdService.postProduct($scope.prod)
+                .then(function(res) {
+                    if (res.data === 'Done')
+                        console.log(res.data);
+                    if (res.data === 'Done') {
+                        window.location.href = "/plot/products/index";
+
+                    } else {
+                        $ngBootbox.alert("Some values are missing");
+                    }
+                });
+        }
+
+
+        $("#blockModal").on("hidden.bs.modal",
+            function () {
+            ProdService.getBlocks()
+                .then(function(res) {
+                    $scope.blocks = res.data;
+                    $scope.prod.BlockId = res.data[res.data.length - 1].Id.toString();
+                    $scope.changeRoad();
+                    $scope.setDesc();
+                });
+
+            $scope.setBlockName();
+        });
+
+        $('#roadPlusBtn').on('click',
+            function() {
+
+                $('#loadIframeRoad').html('<iframe src="/Roads/Create?bid=' +
+                    $scope.prod.BlockId +
+                    '"></iframe>');
+            });
+
+        $('#roadModal').on("hidden.bs.modal",
+            function() {
+                ProdService.getRoads($scope.prod.BlockId)
+                    .then(function(res) {
+                        $scope.roads = res.data;
+                        $scope.prod.RoadId = res.data[res.data.length - 1].Id.toString();
+                        $scope.setDesc();
+                    });
+
+                $scope.setRoadName();
+            });
+    }
+</script>

@@ -1,0 +1,531 @@
+﻿
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_InnerLayout.cshtml";
+}
+
+
+<div class="parentDiv panel navbar navbar-fixed" ng-app="app" ng-controller="PMCtr">
+    <div class="head form-inline panel-heading" style="color: black">
+        <h2>Plot Allocation Master</h2>
+    </div>
+
+    <form>
+
+        <fieldset class="scheduler-border">
+            <legend class="scheduler-border">Plot Allocation</legend>
+            <br />
+            <br />
+
+            <div class="form-horizontal col-sm-5">
+                <fieldset class="scheduler-border">
+                    <legend class="scheduler-border">Search</legend>
+                    <div class="form-group">
+                        <label class="control-label col-sm-5" style="text-align: left">Block/Sector</label>
+                        <div class="col-sm-7">
+                            <select ng-model="selectedBlock"
+                                    ng-change="changeRoad()"
+                                    class="form-control">
+
+                                <option ng-repeat="block in blocks"
+                                        value="{{block.Id}}">
+                                    {{block.Name}}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-5" style="text-align: left">Road</label>
+                        <div class="col-sm-7">
+                            <select ng-model="selectedRoad"
+                                    ng-change="changeProductList()"
+                                    class="form-control">
+
+                                <option ng-repeat="road in roads"
+                                        value="{{road.Id}}">
+                                    {{road.Name}}({{road.Size}})
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-sm-5" style="text-align: left">Facing</label>
+                        <div class="col-sm-7">
+                            <select ng-model="selectedFacing"
+                                    ng-change="changeProductList()"
+                                    class="form-control">
+                                <option ng-repeat="f in fs"
+                                        value="{{f.Id}}">
+                                    {{f.Name}}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+
+                </fieldset>
+                <div class="pull-right" ng-show="loading">
+                    <img src="~/Content/loading.gif" width="40" height="30" />
+                </div>
+                <table class="col-sm-12 table-bordered">
+                    <thead>
+                        <tr style="color: salmon; font-weight: bold">
+                            <th>#</th>
+                            <th style="text-align: center">Product Description</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="prod in prods">
+                            <td style="color: salmon;">{{$index+1}}</td>
+                            <td> &nbsp;{{prod.Desc}}</td>
+                            <td style="text-align: center">
+                                <button class="btn-primary" ng-click="setProduct(prod)">Load</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="form-horizontal col-sm-offset-2 col-sm-5">
+                <div class="form-group">
+                    <label class="control-label col-sm-5" style="text-align: left">Project Type</label>
+                    <div class="col-sm-7">
+                        <select ng-model="selectedType"
+                                ng-change="changeProject()"
+                                class="form-control">
+
+                            <option ng-repeat="pt in pts"
+                                    value="{{pt.Id}}">
+                                {{pt.Name}}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-sm-5" style="text-align: left">Project Name</label>
+                    <div class="col-sm-7">
+                        <select ng-model="prodMaster.ProjectId"
+                                ng-change="Load()"
+                                class="form-control">
+
+                            <option ng-repeat="proj in projs"
+                                    value="{{proj.Id}}">
+                                {{proj.Name}}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-sm-5" style="text-align: left">Product Description</label>
+                    <div class="col-sm-7">
+                        <textarea ng-model="prodMaster.Desc" class="form-control">{{prodMaster.Desc}}</textarea>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-sm-5" style="text-align: left">Plot No</label>
+                    <div class="col-sm-7">
+                        <div style="float: right">
+                            @*<input type="checkbox" style="float: left; margin-top: 5px;">
+                                <div style="margin-left: 25px;">
+                                    Multiple
+                                </div>*@
+                            <button type="button" data-toggle="modal" data-target="#AddModal" ng-click="clickedMultiple()">Multiple</button>
+                        </div>
+                        <div style="overflow: hidden; padding-right: .5em;">
+                            <input type="text" class="form-control" ng-model="plotNoSingle"/>
+                        </div>
+                    </div>
+                    <!-- Modal -->
+                    <div class="modal fade" id="AddModal" role="dialog">
+                        <div class="modal-dialog">
+
+                            <!-- Modal content-->
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" id="close-modal-block" data-dismiss="modal"><strong>&times;</strong></button>
+                                    <h4 class="modal-title">Click <strong>&times;</strong> after saving</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="col-xs-6">
+                                        <div class="form-group">
+                                            <label class="col-xs-2">From:</label>
+                                            <div class="col-xs-8">
+                                                <input ng-model="from" type="text" class="form-control" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <div class="form-group">
+                                            <label class="col-xs-2">To:</label>
+                                            <div class="col-xs-8">
+                                                <input ng-model="to" type="text" class="form-control" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-offset-2 col-xs-9">
+                                        <div class="col-xs-3">
+                                            <input ng-model="mulRadio" value="1" type="radio" name="diffMultiplier" />
+                                            Odd
+                                        </div>
+                                        <div class="col-xs-3">
+                                            <input ng-model="mulRadio" value="2" type="radio" name="diffMultiplier" />
+                                            Even
+                                        </div>
+                                        <div class="col-xs-3">
+                                            <input ng-model="mulRadio" value="0" checked type="radio" name="diffMultiplier" />
+                                            Regular
+                                        </div>
+
+                                        &nbsp;<button class="btn-primary" type="button" ng-click="generateMul()">Generate</button>
+                                        <hr />
+                                    </div>
+                                    <div class="col-xs-offset-5">
+                                        <button class="btn btn-primary btn-small" ng-click="AddPlot()">Add Multiple</button>
+                                    </div>
+                                    <table class="table table-bordered table-responsive">
+                                        <thead>
+                                            <tr style="color: salmon; font-weight: bold">
+                                                <th>Product</th>
+                                                <th>Plot No</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr ng-repeat="mul in muls">
+                                                <td>{{prodMaster.Desc}}</td>
+                                                <td>{{mul}}</td>
+                                                <td></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+
+
+
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-sm-5" style="text-align: left"></label>
+                    <div class="col-sm-7">
+                        <div>
+                            <input ng-model="prodMaster.Saleable" type="radio" name="Saleable" value="1" style="float: left; margin-top: 5px;">
+                            <div style="margin-left: 25px;">
+                                Saleable
+                            </div>
+
+                            <input ng-model="prodMaster.Saleable" type="radio" name="Saleable" value="2" style="float: left; margin-top: 5px;">
+                            <div style="margin-left: 25px;">
+                                Non Saleable
+                            </div>
+
+                            <input ng-model="prodMaster.Saleable" type="radio" name="Saleable" value="3" style="float: left; margin-top: 5px;">
+                            <div style="margin-left: 25px;">
+                                Reserved
+                            </div>
+
+                            <input ng-model="prodMaster.Saleable" type="radio" name="Saleable" value="4" style="float: left; margin-top: 5px;">
+                            <div style="margin-left: 25px;">
+                                Joint Venture
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-offset-5 col-sm-7">
+                        <button type="button" class="btn btn-primary btn-small" ng-click="AddPlot()">Add</button>
+                        <button type="button" class="btn btn-danger btn-small">Clear</button>
+                    </div>
+                </div>
+
+            </div>
+        </fieldset>
+    </form>
+
+    <div class="form-horizontal col-sm-4 row">
+        <div class="form-group">
+            <label class="control-label col-sm-5">Filter</label>
+            <div class="col-sm-7">
+                <input ng-model="filter" type="text" class="form-control" />
+            </div>
+        </div>
+    </div>
+
+<div class="col-sm-offset-1 col-sm-10">
+    <div class="pull-right" ng-show="loading">
+        <img src="~/Content/loading.gif" width="40" height="30" />
+    </div>
+    <fieldset class="scheduler-border">
+
+        <legend class="scheduler-border">Result Grid</legend>
+
+        <table class="col-sm-10 table-bordered col-sm-offset-1">
+            <thead>
+            <tr style="color: salmon; font-weight: bold">
+                <th>Sl</th>
+                <th>Description</th>
+                <th>Plot No</th>
+                <th>Saleable</th>
+                <th>Sold</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="d in prodMaster.PlotAllocationDetails | filter: filter">
+                <td>{{$index+1}}</td>
+                <td>{{prodMaster.Desc}}</td>
+                <td>{{d.Serial}}</td>
+                <td>{{d.Saleable}}</td>
+                <td>{{d.Sold}}</td>
+                <td><button type="button" class="btn-small btn-danger" ng-click="deletePlotAlloc(d)">Delete</button></td>
+            </tr>
+            </tbody>
+        </table>
+    </fieldset>
+</div>
+</div>
+
+<script>
+    var app = angular.module('app', ['ngBootbox']);
+    app.controller('PMCtr', ['$scope', '$ngBootbox', 'PMService', PMCtr]);
+    app.factory('PMService',
+        [
+            '$http', function ($http) {
+
+                return {
+                    getBlocks: function (id) {
+                        return $http.get('/blocks/GetBlocks/' + id);
+                    },
+                    getRoads: function (id) {
+                        return $http.get('/Roads/GetRoads/' + id);
+                    },
+                    getFacing: function () {
+                        return $http.get('/Products/GetFacings/');
+                    },
+                    getProjectTypes: function () {
+                        return $http.get('/LandMasters/GetProjectTypes');
+                    },
+                    getProjects: function (id) {
+                        return $http.get('/LandMasters/GetProjects/' + id);
+                    },
+                    getProduct: function (bId, rId, fId) {
+                        return $http.get('/plot/products/' + bId + '/' + rId + '/' + fId);
+                    },
+                    getPlotAllocationDetails: function (id, pId) {
+                        return $http.get('/plot/allocation/GetPlotAllocationWithDetails/' + id + '/' + pId);
+                    },
+                    postPlotAlloc: function (postObj) {
+                        return $http.post('/plot/allocation/postPlotAlloc', postObj);
+                    },
+                    deletePlotAlloc: function(id) {
+                        return $http.get('/plot/allocation/delete/' + id);
+                    }
+                };
+            }
+        ]);
+
+    function PMCtr($scope, $ngBootbox, PMService) {
+        $scope.prodMaster = {};
+        $scope.prodMaster.Saleable = '1';
+        $scope.mulRadio = '0';
+        $scope.prodMaster.ProjectId = {};
+        $scope.prodMaster.ProductId = {};
+        $scope.prodMaster.PlotAllocationDetails = [];
+        $scope.muls = [];
+        $scope.plotNoSingle = null;
+        $scope.prodMaster.Id = {};
+
+
+        $scope.generateMul = function () {
+            if ($scope.prodMaster.ProductId != null) {
+                $scope.muls = [];
+                if ($scope.mulRadio == '0') {
+                    for (let i = parseInt($scope.from); i <= parseInt($scope.to); i++) {
+                        $scope.muls.push(i.toString());
+                    }
+                }
+
+                else if ($scope.mulRadio == '1') {
+                    for (let i = parseInt($scope.from); i <= parseInt($scope.to); i++) {
+                        if (i % 2 == 1)
+                            $scope.muls.push(i.toString());
+                    }
+                }
+
+                else if ($scope.mulRadio == '2') {
+                    for (let i = parseInt($scope.from); i <= parseInt($scope.to); i++) {
+                        if (i % 2 == 0)
+                            $scope.muls.push(i.toString());
+                    }
+                }
+                $scope.from = null;
+                $scope.to = null;
+            }
+        }
+
+
+        PMService.getBlocks()
+            .then(function (res) {
+                $scope.$emit('LOAD');
+                $scope.blocks = res.data;
+                $scope.selectedBlock = res.data[0].Id.toString();
+                $scope.changeRoad();
+            });
+
+        PMService.getProjectTypes()
+            .then(function (res) {
+                $scope.pts = res.data;
+                $scope.selectedType = res.data[0].Id.toString();
+                $scope.changeProject();
+            });
+
+        $scope.changeProject = function () {
+            PMService.getProjects($scope.selectedType)
+                .then(function (res) {
+
+                    $scope.projs = res.data;
+                    $scope.prodMaster.ProjectId = res.data[0].Id.toString();
+                    if ($scope.prodMaster.ProductId !== 'undefined')
+                        $scope.Load();
+
+                });
+        }
+
+        $scope.changeRoad = function () {
+            PMService.getRoads($scope.selectedBlock)
+                .then(function (res) {
+                    $scope.$emit('LOAD');
+                    $scope.roads = res.data;
+                    $scope.selectedRoad = res.data[0].Id.toString();
+                    $scope.changeProductList();
+                });
+        }
+
+        PMService.getFacing()
+            .then(function (res) {
+                $scope.$emit('LOAD');
+                $scope.fs = res.data;
+                $scope.selectedFacing = res.data[0].Id.toString();
+                $scope.changeProductList();
+            });
+
+        $scope.changeProductList = function () {
+            $scope.$emit('LOAD');
+            if ($scope.selectedBlock != null && $scope.selectedRoad != null && $scope.selectedFacing)
+                PMService.getProduct($scope.selectedBlock, $scope.selectedRoad, $scope.selectedFacing)
+                    .then(function (res) {
+                        $scope.prods = res.data;
+                        $scope.$emit('UNLOAD');
+                    });
+        }
+
+        $scope.setProduct = function (obj) {
+            $scope.prodMaster.Desc = obj.Desc.trim();
+            $scope.prodMaster.ProductId = obj.Id;
+            $scope.Load();
+        }
+
+        $scope.Load = function () {
+            $scope.$emit('LOAD');
+            PMService.getPlotAllocationDetails($scope.prodMaster.ProductId, $scope.prodMaster.ProjectId)
+                .then(function (res) {
+                    $scope.prodMaster.PlotAllocationDetails = res.data.PlotAllocationDetails;
+                    $scope.$emit('UNLOAD');
+                });
+        }
+
+        $scope.clickedMultiple = function () {
+            $scope.plotNoSingle = null;
+            console.log("modal window");
+        }
+
+        $scope.AddPlot = function () {
+            $scope.$emit('LOAD');
+            if ($scope.plotNoSingle == null) {
+                var pObj = {};
+                pObj.ProductId = $scope.prodMaster.ProductId.toString();
+                pObj.ProjectId = $scope.prodMaster.ProjectId.toString();
+                pObj.BlockId = $scope.selectedBlock.toString();
+                pObj.RoadId = $scope.selectedRoad.toString();
+                pObj.FacingId = $scope.selectedFacing.toString();
+                pObj.Saleable = $scope.prodMaster.Saleable.toString();
+                pObj.Muls = $scope.muls;
+
+                console.log("PlotMaster", $scope.prodMaster);
+                console.log("PostObj", pObj);
+
+                PMService.postPlotAlloc(pObj)
+                    .then(function (res) {
+                        for (let i = 0; i < res.data.length; i++) {
+                            $scope.prodMaster.PlotAllocationDetails.push(res.data[i]);
+                            
+                            $scope.$emit('UNLOAD');
+                        }
+                    });
+                $('#AddModal').modal('hide');
+
+            }
+            else {
+                var postObj = {};
+                postObj.ProductId = $scope.prodMaster.ProductId.toString();
+                postObj.ProjectId = $scope.prodMaster.ProjectId.toString();
+                postObj.BlockId = $scope.selectedBlock.toString();
+                postObj.RoadId = $scope.selectedRoad.toString();
+                postObj.FacingId = $scope.selectedFacing.toString();
+                postObj.Saleable = $scope.prodMaster.Saleable.toString();
+                postObj.Serial = $scope.plotNoSingle.toString();
+                postObj.Muls = null;
+
+                console.log("PlotMaster", $scope.prodMaster);
+                console.log("PostObj", postObj);
+
+                PMService.postPlotAlloc(postObj)
+                    .then(function(res) {
+                        if (res.data !== 'Error') {
+                            $scope.Load();
+                        } else {
+                            $scope.Load();
+                        }
+                    });
+                
+                $scope.$emit('UNLOAD');
+
+            }
+        }
+
+        $scope.deletePlotAlloc = function(obj) {
+
+            $ngBootbox.confirm('Delete Plot Allocation?')
+                .then(function () {
+                    PMService.deletePlotAlloc(obj.Id)
+                        .then(function(res) {
+                            if (res.data === 'Done') {
+                                $scope.prodMaster.PlotAllocationDetails.splice(
+                                    $scope.prodMaster.PlotAllocationDetails.indexOf(obj),
+                                    1);
+                            } else {
+                                $ngBootbox.alert("Some thing went wrong or user may not be authorized!");
+                            }
+                        });
+                });
+        }
+
+
+        $scope.$on('LOAD', function () {
+            $scope.loading = true;
+        });
+        $scope.$on('UNLOAD', function () {
+            $scope.loading = false;
+        });
+
+    }
+</script>

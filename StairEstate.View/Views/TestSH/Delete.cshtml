@@ -1,0 +1,145 @@
+﻿@model StairEstate.Entity.sales_stack_holder
+
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Views/Shared/_InnerLayout.cshtml";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>sales_stack_holder</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.sales_stack_holder_type.stack_holder_type)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.sales_stack_holder_type.stack_holder_type)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.sys_country.name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.sys_country.name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.stack_holder_name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.stack_holder_name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.stack_holder_phone)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.stack_holder_phone)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.stack_holder_email)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.stack_holder_email)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.stack_holder_Father_name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.stack_holder_Father_name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.stack_holder_mother_name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.stack_holder_mother_name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.stack_holder_contact_person)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.stack_holder_contact_person)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.stack_holder_contact_person_number)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.stack_holder_contact_person_number)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.stack_holder_pre_address)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.stack_holder_pre_address)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.stack_holder_per_address)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.stack_holder_per_address)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.stack_holder_nid_no)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.stack_holder_nid_no)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.stack_holder_Dob)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.stack_holder_Dob)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.stack_holder_image)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.stack_holder_image)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.deleted)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.deleted)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>

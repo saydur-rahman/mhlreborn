@@ -1,0 +1,27 @@
+﻿@model StairEstate.Entity.proj_block
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_InnerLayout.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>proj_block</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Block_name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Block_name)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Block_id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

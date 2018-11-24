@@ -1,0 +1,184 @@
+﻿@model StairEstate.Entity.proj_project
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_InnerLayout.cshtml";
+}
+<div class="parentDiv panel navbar navbar-fixed">
+    <div class="head form-inline panel-heading" style="color: black">
+        <h2>Edit Project : @Model.project_id</h2>
+    </div>
+    @using (Html.BeginForm("Edit", "Projects", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        <br />
+        <br />
+
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(model => model.id)
+        @Html.HiddenFor(model => model.project_image)
+
+
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="row">
+
+            @*First Column*@
+            <div class="form-horizontal col-sm-5">
+                <div class="form-group">
+                    <label class="control-label col-sm-5" style="text-align: left">Project Id</label>
+                    <div class="col-sm-7">
+                        @Html.EditorFor(model => model.project_id, new { htmlAttributes = new { @class = "form-control", @readonly = "" } })
+                        @Html.ValidationMessageFor(model => model.project_id, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-sm-5" style="text-align: left">Project Initial</label>
+                    <div class="col-sm-7">
+                        @Html.EditorFor(model => model.project_initial, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.project_initial, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-sm-5" style="text-align: left">Project Type</label>
+                    <div class="col-sm-7">
+                        @Html.DropDownList("project_type_id", null, htmlAttributes: new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.project_type_id, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-sm-5" style="text-align: left">Project Name</label>
+                    <div class="col-sm-7">
+                        @Html.EditorFor(model => model.project_name, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.project_name, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-sm-5" style="text-align: left">Project Address</label>
+                    <div class="col-sm-7">
+                        <textarea id="project_address" name="project_address" class="form-control">@Model.project_address</textarea>
+                        @Html.ValidationMessageFor(model => model.project_address, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-sm-5" style="text-align: left">Project Status</label>
+                    <div class="col-md-6">
+                        @Html.DropDownList("project_status", null, htmlAttributes: new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.project_status, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-sm-5" style="text-align: left">Project Serial</label>
+                    <div class="col-sm-7">
+                        @Html.EditorFor(model => model.project_serial, new { htmlAttributes = new { @class = "form-control", @readonly = "" } })
+                        @Html.ValidationMessageFor(model => model.project_serial, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-sm-5" style="text-align: left">Project Manager</label>
+                    <div class="col-sm-7">
+                        <datalist id="sp">
+                            @{
+                        foreach (var sp in ViewBag.SP)
+                        {
+                            <option value="@sp.emp_code">
+                                @sp.emp_code
+                            </option>
+                }
+                            }
+                        </datalist>
+                        <input list="sp" name="manager" class="form-control" required="" value="@Model.hr_employee.emp_code">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-sm-5" style="text-align: left">Branch</label>
+                    <div class="col-sm-7">
+                        <datalist id="branch">
+                            @{
+            foreach (var b in ViewBag.Branchs)
+            {
+                    <option value="@b.branch_name">
+                        @b.branch_name
+                    </option>
+}
+                            }
+                        </datalist>
+                        <input list="branch" name="branch" class="form-control" required="" value="@Model.sys_branch.branch_name">
+
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="col-sm-1"></div>
+            @*Second Column*@
+            <div class="form-horizontal col-sm-5">
+                <div class="form-group">
+                    <label class="control-label col-sm-5" style="text-align: left">Start Date</label>
+                    <div class="col-sm-7">
+                        @Html.EditorFor(model => model.project_start_date, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.project_start_date, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-sm-5" style="text-align: left">End Date</label>
+                    <div class="col-sm-7">
+                        @Html.EditorFor(model => model.project_end_date, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.project_end_date, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-sm-5" style="text-align: left">Handover Date</label>
+                    <div class="col-sm-7">
+                        @Html.EditorFor(model => model.project_actual_handover_date, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.project_actual_handover_date, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-sm-5" style="text-align: left">Image</label>
+                    <div class="col-sm-7">
+                        <img id="imgpreview" height="200" width="200" src="@Url.Content(Model.project_image)" style="border-width: 1px; visibility: visible;" />
+                        <input type="file" name="imageFile" class="" onchange="showpreview(this);" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+        <div class="row">
+            <div class="col-sm-1 col-sm-offset-5">
+                <input type="submit" value="Update" class="btn btn-primary" />
+            </div>
+        </div>
+    }
+
+    <div>
+        @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-sm btn-small btn-default return" })
+    </div>
+</div>
+
+<script>
+    function showpreview(input) {
+
+        if (input.files && input.files[0]) {
+
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                $('#imgpreview').css('visibility', 'visible');
+                $('#imgpreview').attr('src', e.target.result);
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+
+    }
+
+    $(function () {
+        $("#project_start_date").datepicker();
+        $("#project_end_date").datepicker();
+        $("#project_actual_handover_date").datepicker();
+    });
+    
+
+</script>

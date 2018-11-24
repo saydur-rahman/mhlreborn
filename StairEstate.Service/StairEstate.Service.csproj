@@ -1,0 +1,137 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{D083AB67-4214-40DA-BEB0-CB3198D94956}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>StairEstate.Service</RootNamespace>
+    <AssemblyName>StairEstate.Service</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BlockService.cs" />
+    <Compile Include="BranchService.cs" />
+    <Compile Include="BrandService.cs" />
+    <Compile Include="CatagoryService.cs" />
+    <Compile Include="Class1.cs" />
+    <Compile Include="CollectorService.cs" />
+    <Compile Include="CountryService.cs" />
+    <Compile Include="CurrentStockDetailsService.cs" />
+    <Compile Include="CurrentStockMasterService.cs" />
+    <Compile Include="CustomerService.cs" />
+    <Compile Include="DistrictService.cs" />
+    <Compile Include="EmployeeService.cs" />
+    <Compile Include="EmployeeTypeService.cs" />
+    <Compile Include="FacingService.cs" />
+    <Compile Include="Generics\IService.cs" />
+    <Compile Include="Generics\Service.cs" />
+    <Compile Include="IBlockService.cs" />
+    <Compile Include="IBranchService.cs" />
+    <Compile Include="IBrandService.cs" />
+    <Compile Include="ICatagoryService.cs" />
+    <Compile Include="ICollectorService.cs" />
+    <Compile Include="ICountryService.cs" />
+    <Compile Include="ICurrentStockDetails.cs" />
+    <Compile Include="ICurrentStockMasterService.cs" />
+    <Compile Include="ICustomerService.cs" />
+    <Compile Include="IDistrictService.cs" />
+    <Compile Include="IEmployeeService.cs" />
+    <Compile Include="IEmployeeTypeService.cs" />
+    <Compile Include="IFacingService.cs" />
+    <Compile Include="ILandMasterService.cs" />
+    <Compile Include="ILandService.cs" />
+    <Compile Include="IMenuService.cs" />
+    <Compile Include="IMouzaService.cs" />
+    <Compile Include="IPlotAllocationDetailsService.cs" />
+    <Compile Include="IPlotAllocationMasterService.cs" />
+    <Compile Include="IPlotSalesDetailsService.cs" />
+    <Compile Include="IPlotSalesOrderDetailsService.cs" />
+    <Compile Include="IPlotSalesOrderService.cs" />
+    <Compile Include="IPlotService.cs" />
+    <Compile Include="IProductService.cs" />
+    <Compile Include="IProductTypeService.cs" />
+    <Compile Include="IProfessionService.cs" />
+    <Compile Include="IProjectService.cs" />
+    <Compile Include="IProjectStatusService.cs" />
+    <Compile Include="IProjectTypeService.cs" />
+    <Compile Include="IRoadService.cs" />
+    <Compile Include="ISalesCustomerService.cs" />
+    <Compile Include="IStackHolderService.cs" />
+    <Compile Include="IStackHolderTypeService.cs" />
+    <Compile Include="IThanaService.cs" />
+    <Compile Include="IUnitService.cs" />
+    <Compile Include="IUserMenuAccessService.cs" />
+    <Compile Include="IUserService.cs" />
+    <Compile Include="IUserTypeService.cs" />
+    <Compile Include="LandMasterService.cs" />
+    <Compile Include="LandService.cs" />
+    <Compile Include="MenuService.cs" />
+    <Compile Include="MouzaService.cs" />
+    <Compile Include="PlotAllocationDetailsService.cs" />
+    <Compile Include="PlotAllocationMasterService.cs" />
+    <Compile Include="PlotSalesDetailsService.cs" />
+    <Compile Include="PlotSalesOrderDetailsService.cs" />
+    <Compile Include="PlotSalesOrderService.cs" />
+    <Compile Include="PlotService.cs" />
+    <Compile Include="ProductService.cs" />
+    <Compile Include="ProductTypeService.cs" />
+    <Compile Include="ProfessionService.cs" />
+    <Compile Include="ProjectService.cs" />
+    <Compile Include="ProjectStatusService.cs" />
+    <Compile Include="ProjectTypeService.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RoadService.cs" />
+    <Compile Include="SalesCustomerService.cs" />
+    <Compile Include="StackHolderService.cs" />
+    <Compile Include="StackHolderTypeService.cs" />
+    <Compile Include="ThanaService.cs" />
+    <Compile Include="UnitService.cs" />
+    <Compile Include="UserMenuAccessService.cs" />
+    <Compile Include="UserService.cs" />
+    <Compile Include="UserSession.cs" />
+    <Compile Include="UserTypeService.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\StairEstate.Entity\StairEstate.Entity.csproj">
+      <Project>{6C79B854-345F-427D-9997-28F2868ED120}</Project>
+      <Name>StairEstate.Entity</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\StairEstate.Repo\StairEstate.Repo.csproj">
+      <Project>{78E68249-767A-426B-B434-E290CF8371FA}</Project>
+      <Name>StairEstate.Repo</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

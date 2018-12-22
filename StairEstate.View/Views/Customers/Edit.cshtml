@@ -185,10 +185,27 @@
             </div>
         </div>
     }
-
+    <div class="row">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Share</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            @foreach (var item in Model.sales_nominee)
+            {
+                <td>@item.nominee_name</td>
+                <td>@item.nominee_share</td>
+                <td><a href="/nominee/update/@item.nominee_id">update</a></td>
+            }
+        </table>
+    </div>
     <div>
         @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-sm btn-small btn-default return" })
     </div>
+
 </div>
 
 

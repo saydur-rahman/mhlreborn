@@ -43,6 +43,16 @@ namespace StaitEstate.View.Controllers.Sales
 
 
 
+        // Nominee Create
+        [HttpPost]
+        [Route("Nominee/create")]
+        public ActionResult NomineeCreate()
+        {
+            return View("index");
+        }
+
+
+
         //Json
         [Route("getNextFileNo")]
         public JsonResult GetFileNo()

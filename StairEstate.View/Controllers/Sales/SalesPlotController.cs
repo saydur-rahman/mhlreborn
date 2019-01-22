@@ -48,7 +48,9 @@ namespace StaitEstate.View.Controllers.Sales
         [Route("Nominee/create")]
         public ActionResult NomineeCreate()
         {
+
             return View("index");
+
         }
 
 

@@ -44,12 +44,11 @@ namespace StaitEstate.View.Controllers.Sales
 
 
         // Nominee Create
-        [HttpPost]
-        [Route("Nominee/create")]
-        public ActionResult NomineeCreate()
+        [Route("NomineeCreate")]
+        public String Creating_nominee()
         {
 
-            return View("index");
+            return "working Bro" ;
 
         }
 

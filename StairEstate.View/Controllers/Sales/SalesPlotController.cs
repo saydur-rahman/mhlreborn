@@ -48,7 +48,8 @@ namespace StaitEstate.View.Controllers.Sales
         public String Creating_nominee()
         {
 
-            return "working Bro" ;
+            string[] keys = Request.Form.AllKeys;
+            return "something";
 
         }
 

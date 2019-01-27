@@ -63,7 +63,7 @@
                             <div class="row" style="margin-top: 4px;">
                                 <label class="control-label col-xs-5" style="text-align: left">Nominee Age</label>
                                 <div class="col-xs-7">
-                                    <input class="form-control" type="text" />
+                                    <input class="form-control age_of_nominee" type="text" />
                                 </div>
                             </div>
 
@@ -520,24 +520,21 @@
 
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
 <script>
-
+    // work done in Jquery ---------------- START------------------------------------------
     $('.nominee_button').click(function () {
         console.log("Button Click Working");
     });
 
     function sendFormData() {
         let sales_order_no = $('.sales_order_no').val();
-        alert(sales_order_no);
-
+        let age_of_nominee = $('.age_of_nominee').val();
         var results = new Array();
+        var data_list = { "age_of_nominee": age_of_nominee, "sales_order_no": sales_order_no};
+        results.push(data_list);
 
-        var emp1 = { "ID": "12", "Name": "Manas" };
-        results.push(emp1);
+      
 
-        var emp2 = { "ID": "2", "Name": "Tester" };
-        results.push(emp2);
-
-        var postData = { empList: results };
+        var postData = { full_nominee_data_list: results };
 
         // sending ajax request
         $.ajax({
@@ -555,6 +552,9 @@
         });
 
     }
+
+
+    // work done in Jquery ---------------- END ------------------------------------------
 
 
     var app = angular.module('app', ['ngBootbox']);

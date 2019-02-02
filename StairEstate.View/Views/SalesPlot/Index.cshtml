@@ -374,7 +374,7 @@
                                         <div class="col-xs-5">
                                             <input type="text" class="form-control" ng-model="" placeholder="Auto Load" /><label class="col-xs-2" style="text-align: left">Decimal</label>
                                         </div>
-                                        
+
                                     </div>
                                 </div>
                             </div>
@@ -397,16 +397,54 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="from horizontal col-xs-10">
+                                <div class="col-xs-5">
                                     <div class="form-group">
-                                        <label class="col-xs-3" style="text-align: left">Amount Type</label>
-                                        <div class="col-xs-3">
+                                        <label class="control-label col-xs-5" style="text-align: left">Amount Type</label>
+                                        <div class="col-xs-7">
+                                            <div style="overflow: hidden; padding-right: .5em;">
+                                                <select class="form-control" ng-model="">
+                                                    <option ng-repeat="cus in custs"
+                                                            value="{{cus}}">
+                                                        {{cus.Name}} - {{cus.Code}}
+                                                    </option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+                                <div class="col-xs-5 col-xs-offset-1">
+                                    <div class="form-group">
+                                        <label class="control-label col-xs-5" style="text-align: left">No. Of Installment</label>
+                                        <div class="col-xs-7">
                                             <input type="text" class="form-control" ng-model="" placeholder="Auto Load" />
                                         </div>
+                                    </div>
+                                </div>
+                            </div>
 
-                                        <label class="col-xs-3" style="text-align: left">No. Of Installment</label>
-                                        <div class="col-xs-3">
-                                            <input type="date" class="form-control" ng-model="" />
+                            <div class="row">
+                                <div class="col-xs-5">
+                                    <div class="form-group">
+                                        <label class="control-label col-xs-5" style="text-align: left"></label>
+                                        <div class="col-xs-7">
+                                            <div>
+                                                <input type="text" class="form-control" ng-model="" placeholder="Amount" /><br />
+                                                <input type="text" class="form-control" ng-model="" placeholder="Percentage" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+                                <div class="col-xs-5 col-xs-offset-1">
+                                    <div class="form-group">
+                                        <label class="control-label col-xs-5" style="text-align: left">Fixed Slotting Amount</label>
+                                        <div class="col-xs-7">
+                                            <input type="text" class="form-control" ng-model="" placeholder="Auto Load" />
                                         </div>
                                     </div>
                                 </div>
@@ -457,10 +495,6 @@
                                     </div>
                                 </div>
                             </div>
-
-                        </fieldset>
-                        <fieldset class="scheduler-border">
-                            <legend class="scheduler-border">Display</legend>
                             <table class="col-xs-12 table-bordered table">
                                 <thead>
                                     <tr style="color: salmon; font-weight: bold">
@@ -485,9 +519,149 @@
                                     </tr>
                                 </tbody>
                             </table>
-
-                            <button type="button" class="col-xs-offset-5" ng-click="plotDone()">Done</button>
                         </fieldset>
+                        <fieldset class="scheduler-border">
+                            <legend class="scheduler-border">Rest Amount</legend>
+                            <div class="row">
+                                <div class="from horizontal col-xs-10">
+                                    <div class="form-group">
+                                        <label class="col-xs-3" style="text-align: left">Booking Money</label>
+                                        <div class="col-xs-3">
+                                            <input type="text" class="form-control" ng-model="" placeholder="Auto Load" />
+                                        </div>
+
+                                        <label class="col-xs-3" style="text-align: left">Booking Date</label>
+                                        <div class="col-xs-3">
+                                            <input type="date" class="form-control" ng-model="" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-5">
+                                    <div class="form-group">
+                                        <label class="control-label col-xs-5" style="text-align: left">Amount Type</label>
+                                        <div class="col-xs-7">
+                                            <div style="overflow: hidden; padding-right: .5em;">
+                                                <select class="form-control" ng-model="">
+                                                    <option ng-repeat="cus in custs"
+                                                            value="{{cus}}">
+                                                        {{cus.Name}} - {{cus.Code}}
+                                                    </option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+                                <div class="col-xs-5 col-xs-offset-1">
+                                    <div class="form-group">
+                                        <label class="control-label col-xs-5" style="text-align: left">No. Of Installment</label>
+                                        <div class="col-xs-7">
+                                            <input type="text" class="form-control" ng-model="" placeholder="Auto Load" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-xs-5">
+                                    <div class="form-group">
+                                        <label class="control-label col-xs-5" style="text-align: left"></label>
+                                        <div class="col-xs-7">
+                                            <div>
+                                                <input type="text" class="form-control" ng-model="" placeholder="Amount" /><br />
+                                                <input type="text" class="form-control" ng-model="" placeholder="Percentage" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+                                <div class="col-xs-5 col-xs-offset-1">
+                                    <div class="form-group">
+                                        <label class="control-label col-xs-5" style="text-align: left">Fixed Slotting Amount</label>
+                                        <div class="col-xs-7">
+                                            <input type="text" class="form-control" ng-model="" placeholder="Auto Load" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="from horizontal col-xs-10">
+                                    <div class="form-group">
+                                        <label class="col-xs-5" style="text-align: left">Facing</label>
+                                        <div class="col-xs-7">
+                                            <select class="form-control" ng-model="search.facing">
+                                                <option ng-repeat="f in fs"
+                                                        value="{{f.Id}}">
+                                                    {{f.Name}}
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="from horizontal col-xs-10">
+                                    <div class="form-group">
+                                        <label class="col-xs-5" style="text-align: left">Plot No</label>
+                                        <div class="col-xs-7">
+                                            <input type="text" class="form-control" ng-model="search.plotNo" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="from horizontal col-xs-10">
+                                    <div class="form-group">
+                                        <label class="col-xs-5" style="text-align: left">Combination Search</label>
+                                        <div class="col-xs-7">
+                                            <input type="text" class="form-control" ng-model="search.combination" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="from horizontal col-xs-10">
+                                    <div class="form-group">
+                                        <label class="col-xs-5" style="text-align: left"></label>
+                                        <div class="col-xs-7">
+                                            <button type="button" class="btn btn-default" ng-click="search()">Search</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <table class="col-xs-12 table-bordered table">
+                                <thead>
+                                    <tr style="color: salmon; font-weight: bold">
+                                        <th colspan="2"></th>
+                                        <th>Block</th>
+                                        <th>Road</th>
+                                        <th>Facing</th>
+                                        <th>Size</th>
+                                        <th>Unit</th>
+                                        <th>Plot No</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="b in searchedPlot">
+                                        <td colspan="2"><input type="checkbox" ng-model="searchedPlot[$index].selectedPlot" /></td>
+                                        <td>{{b.Block.Name}}</td>
+                                        <td>{{b.Road.No}}</td>
+                                        <td>{{b.Facing.Name}}</td>
+                                        <td>{{b.Size}}</td>
+                                        <td>{{b.Unit}}</td>
+                                        <td>{{b.PlotNo}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </fieldset>
+                        
 
                     </div>
 

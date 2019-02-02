@@ -10829,6 +10829,7 @@
     <Content Include="Views\PlotAllocation\Create.cshtml" />
     <Content Include="Views\PlotAllocation\Index.cshtml" />
     <Content Include="Views\SalesPlot\Index.cshtml" />
+    <Content Include="Views\SalesPlot\PaymentSchedule.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

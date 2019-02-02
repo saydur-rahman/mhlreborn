@@ -41,7 +41,11 @@ namespace StaitEstate.View.Controllers.Sales
             return View();
         }
 
-
+        [Route("paymentSchedule")]
+        public ActionResult PaymentSchedule()
+        {
+            return View();
+        }
 
         //Json
         [Route("getNextFileNo")]
